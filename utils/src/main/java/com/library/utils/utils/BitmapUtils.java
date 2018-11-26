@@ -15,7 +15,7 @@ import java.io.File;
 /**
  * Created by Administrator on 2018\2\7 0007.
  */
-
+@Deprecated
 public class BitmapUtils {
 
     /**
