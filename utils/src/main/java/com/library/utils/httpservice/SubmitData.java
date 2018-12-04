@@ -84,6 +84,7 @@ public class SubmitData {
      * @param map
      */
     public void setBoby(HashMap<String, String> map) {
+        mode = MODE_FORM;
         if (map != null) {
             for (Map.Entry entry : map.entrySet()) {//追加表单信息
                 builder.addFormDataPart(valueOf(entry.getKey()), valueOf(entry.getValue()));
@@ -99,6 +100,7 @@ public class SubmitData {
      */
     public void setJosnBoby(HashMap<String, String> map) {
         //TODO：
+        mode = MODE_JSON;
         JSONObject json = new JSONObject(map);
         MediaType JSON = MediaType.parse("application/json; charset=" + charset);
         body = RequestBody.create(JSON, String.valueOf(json));
@@ -110,7 +112,6 @@ public class SubmitData {
      * @param map  请求体
      * @param mode 上传方式 表单： 0   json格式 ：1
      */
-    @Deprecated
     public void setBoby(HashMap<String, String> map, int mode) {
         //TODO：
         this.mode = mode;
@@ -130,30 +131,10 @@ public class SubmitData {
      * @param map
      * @param headers 头部信息
      */
-    public void setBoby(HashMap<String, String> headers, HashMap<String, String> map) {
-        this.headers = headers;
-        setBoby(map);
-    }
-
-    /**
-     * 请求体
-     *
-     * @param map  请求体
-     * @param mode json格式
-     */
-    @Deprecated
     public void setBoby(HashMap<String, String> headers, HashMap<String, String> map, int mode) {
-        //TODO：
-        this.mode = mode;
         this.headers = headers;
-        switch (mode) {
-            case MODE_FORM:
-                setBoby(map);
-                break;
-            case MODE_JSON:
-                setJosnBoby(map);
-                break;
-        }
+        setBoby(map,mode);
+
     }
 
 
@@ -164,12 +145,26 @@ public class SubmitData {
      * @param fileKey 文件key
      * @param file    文件
      */
-    public void setBoby(HashMap<String, String> map, String fileKey, File file) {
+    public void setFileBoby(HashMap<String, String> map, String fileKey, File file) {
+        this.mode = MODE_FORM;
         setBoby(map);
         builder.addFormDataPart(fileKey, file.getName(), MultipartBody.create(MediaType.parse("*/*"), file)); // 参数分别为， 请求key ，文件名称 ， RequestBody
     }
 
     /**
+     * 请求体，JOSN格式
+     * @param map
+     * @param fileKey
+     * @param file
+     */
+    public void setFileJsonBoby(HashMap<String, String> map, String fileKey, File file) {
+        this.mode = MODE_JSON;
+        JSONObject json = new JSONObject(map);
+        MediaType JSON = MediaType.parse("application/json; charset=" + charset);
+        builder.addFormDataPart(fileKey, file.getName(), MultipartBody.create(MediaType.parse("*/*"), file)); // 参数分别为， 请求key ，文件名称 ， RequestBody
+        body = RequestBody.create(JSON, String.valueOf(json));
+    }
+    /**
      * 请求体，json格式
      *
      * @param map     参数
@@ -177,19 +172,18 @@ public class SubmitData {
      * @param file    文件
      * @param mode    上传方式 表单： 0   json格式 ：1
      */
-    public void setBoby(HashMap<String, String> map, String fileKey, File file, int mode) {
+    public void setFileBoby(HashMap<String, String> map, String fileKey, File file, int mode) {
+        this.mode = mode;
         switch (mode) {
             case MODE_FORM:
-                setBoby(map, fileKey, file);
+                setFileBoby(map, fileKey, file);
                 break;
             case MODE_JSON:
-                JSONObject json = new JSONObject(map);
-                MediaType JSON = MediaType.parse("application/json; charset=" + charset);
-                builder.addFormDataPart(fileKey, file.getName(), MultipartBody.create(MediaType.parse("*/*"), file)); // 参数分别为， 请求key ，文件名称 ， RequestBody
-                body = RequestBody.create(JSON, String.valueOf(json));
+                setFileJsonBoby(map,fileKey,file);
                 break;
         }
     }
+
     /**
      * 请求体，json格式
      *
@@ -198,24 +192,11 @@ public class SubmitData {
      * @param file    文件
      * @param mode    上传方式 表单： 0   json格式 ：1
      */
-    public void setBoby(HashMap<String, String> headers,HashMap<String, String> map, String fileKey, File file, int mode) {
+    public void setFileBoby(HashMap<String, String> headers, HashMap<String, String> map, String fileKey, File file, int mode) {
         this.headers = headers;
-        setBoby(map,fileKey,file,mode);
+        setFileBoby(map, fileKey, file, mode);
     }
 
-    /**
-     * 请求体，表单格式
-     *
-     * @param map     参数
-     * @param fileKey 文件key
-     * @param files   文件集合
-     */
-    public void setBoby(HashMap<String, String> map, String fileKey, List<File> files) {
-        setBoby(map);
-        for (File file : files) {
-            builder.addFormDataPart(fileKey, file.getName(), MultipartBody.create(MediaType.parse("*/*"), file)); // 参数分别为， 请求key ，文件名称 ， RequestBody
-        }
-    }
 
 
     /**
@@ -226,10 +207,13 @@ public class SubmitData {
      * @param files   文件集合
      * @param mode    上传方式 表单： 0   json格式 ：1
      */
-    public void setBoby(HashMap<String, String> map, String fileKey, List<File> files, int mode) {
+    public void setFileListBoby(HashMap<String, String> map, String fileKey, List<File> files, int mode) {
         switch (mode) {
             case MODE_FORM:
-                setBoby(map, fileKey, files);
+                setBoby(map);
+                for (File file : files) {
+                    builder.addFormDataPart(fileKey, file.getName(), MultipartBody.create(MediaType.parse("*/*"), file)); // 参数分别为， 请求key ，文件名称 ， RequestBody
+                }
                 break;
             case MODE_JSON:
                 JSONObject json = new JSONObject(map);
@@ -241,18 +225,8 @@ public class SubmitData {
                 break;
         }
     }
-    /**
-     * 请求体，json格式
-     *
-     * @param map     参数
-     * @param fileKey 文件key
-     * @param files   文件集合
-     * @param mode    上传方式 表单： 0   json格式 ：1
-     */
-    public void setBoby(HashMap<String, String> headers,HashMap<String, String> map, String fileKey, List<File> files, int mode) {
-        this.headers =headers;
-      setBoby(map,fileKey,files,mode);
-    }
+
+
 
     /**
      * 请求的路径
