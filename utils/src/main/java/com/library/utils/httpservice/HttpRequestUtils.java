@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -67,18 +68,22 @@ public class HttpRequestUtils {
 
     public static String getRequestRresults(String url, HashMap<String, String> headers, RequestBody requestBody, int mode) {
         String result = null;
+        if (requestBody == null) {
+            FormBody.Builder formBodyBuilder = new FormBody.Builder();
+            requestBody = formBodyBuilder.build();
+        }
         switch (mode) {
             case REQUEST_GET:
                 result = HttpRequestUtils.doGet(url, headers);
                 break;
             case REQUEST_POST:
-                result = HttpRequestUtils.doPost(url, headers, requestBody == null ? null : requestBody);
+                result = HttpRequestUtils.doPost(url, headers, requestBody);
                 break;
             case REQUEST_PUT:
-                result = HttpRequestUtils.doPut(url, headers, requestBody == null ? null : requestBody);
+                result = HttpRequestUtils.doPut(url, headers, requestBody);
                 break;
             case REQUEST_DELETE:
-                result = HttpRequestUtils.doDelete(url, headers, requestBody == null ? null : requestBody);
+                result = HttpRequestUtils.doDelete(url, headers, requestBody);
                 break;
         }
         return result;
@@ -183,7 +188,6 @@ public class HttpRequestUtils {
                 .build();
         return execute(request);
     }
-
     /**
      * delete 方式请求
      *

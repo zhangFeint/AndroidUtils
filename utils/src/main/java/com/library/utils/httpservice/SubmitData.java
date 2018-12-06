@@ -60,15 +60,6 @@ public class SubmitData {
 
 
     /**
-     * 请求的路径
-     *
-     * @param url
-     */
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    /**
      * 请求头部信息
      *
      * @param headers
