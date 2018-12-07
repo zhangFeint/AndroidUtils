@@ -100,7 +100,6 @@ public abstract class BaseActivity extends AppCompatActivity  {
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); // 取消全屏
         }
-
     }
 
     /**
