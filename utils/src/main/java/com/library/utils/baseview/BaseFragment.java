@@ -29,29 +29,41 @@ public abstract class BaseFragment extends Fragment {
     public void initViews() {
 
     }
+
     /**
      * 初始化数据
      */
     public void initData() {
 
     }
-    /**
-     *加载数据
-     */
-    public void loadData() {
 
+    /**
+     * 初始适配器
+     */
+    public void initAdapter() {
     }
+
     /**
      * 初始化监听
      */
     public void initListener() {
 
     }
+
+
     /**
-     * 初始适配器
+     * 加载数据
      */
-    public void initAdapter() {
+    public void loadData() {
+
     }
+
+    /**
+     * 加载适配器
+     */
+    public void loadAdapter() {
+    }
+
 
     /**
      * Fragment中getActivity()或getContext()返回null的问题
@@ -63,15 +75,13 @@ public abstract class BaseFragment extends Fragment {
         super.onAttach(context);
         this.mActivity = (Activity) context;
     }
-    
-    
-    
-    
+
+
     /**
      * 可见时，延迟加载
      */
     public void onVisible() {
-        
+
     }
 
 

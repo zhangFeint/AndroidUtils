@@ -36,13 +36,12 @@ public abstract class BaseActivity extends AppCompatActivity  {
     public void initData() {
 
     }
-
     /**
-     * 加载数据
+     * 初始适配器
      */
-    public void loadData() {
-
+    public void initAdapter() {
     }
+
 
     /**
      * 初始化监听
@@ -52,10 +51,18 @@ public abstract class BaseActivity extends AppCompatActivity  {
     }
 
     /**
-     * 初始适配器
+     * 加载数据
      */
-    public void initAdapter() {
+    public void loadData() {
+
     }
+
+    /**
+     * 加载适配器
+     */
+    public void loadAdapter() {
+    }
+
 
     /**
      * 设置横屏 true ：横屏 false ：竖屏
