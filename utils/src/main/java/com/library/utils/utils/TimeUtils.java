@@ -1,7 +1,9 @@
 package com.library.utils.utils;
 
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,6 +43,13 @@ public class TimeUtils {
     //********************************************************************日期与时间***************************************************************************************
 
     /**
+     * 获取当前时间戳
+     */
+    public long getTimestamp() {
+        return System.currentTimeMillis();
+    }
+
+    /**
      * 获取当前时间
      */
     public String getTime(String format) {
@@ -52,41 +61,61 @@ public class TimeUtils {
         return null;
     }
 
+    /**
+     * 获取当前时间
+     */
     public String getCurrentTime(String format) {
         try {
             SimpleDateFormat sf = new SimpleDateFormat(format, Locale.getDefault());
-            return sf.format(new Date(System.currentTimeMillis()));
+            return sf.format(new Date(getTimestamp()));
         } catch (Exception ex) {
         }
         return null;
     }
-
     /**
-     * 获取当前时间戳
+     *将字符串转为时间戳
+     *
+     * @param user_time "2018-12-9"
+     * @param format     TIME_FORMAT_10
+     * @return
      */
-    public long getTimestamp() {
-        return System.currentTimeMillis();
+    public  String getTimestamp(String user_time,String format) {
+        String re_time = null;
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        Date d;
+        try {
+            d = sdf.parse(user_time);
+            long l = d.getTime();
+            String str = String.valueOf(l);
+            re_time = str.substring(0, 10);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return re_time;
     }
+
 
     /**
      * 将时间戳转为字符串 例如：  cc_time = 1291778220;
      */
-    public String getStrTime(String cc_time, String format) {
+    public String getStrTime(String timestamp, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        String re_StrTime = sdf.format(new Date(Long.valueOf(cc_time) * 1000L));
+        String re_StrTime = sdf.format(new Date(Long.valueOf(timestamp) * 1000L));
         return re_StrTime;
     }
 
     /**
      * 时间戳转字符串
      */
-    public String getStrTime(long timeMillis, String format) {
+    public String getTime(long timeMillis, String format) {
         try {
             return new SimpleDateFormat(format, Locale.getDefault()).format(timeMillis - TimeZone.getDefault().getRawOffset());
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return null;
     }
+
 
     /**
      * 日期字符串转成指定格式的日期字符串 getTimeForFormat("2018-06-02",TimeUtils.TIME_FORMAT_10,TimeUtils.TIME_FORMAT_13)
@@ -255,10 +284,9 @@ public class TimeUtils {
 //        public void onFinish() {
 //        }
 //    }.start();
-    public  Calendar calendar;
-    public  Date date;
-    public  long midTime;
-
+    public Calendar calendar;
+    public Date date;
+    public long midTime;
 
 
     /**
@@ -276,29 +304,6 @@ public class TimeUtils {
                 System.out.println("还剩" + hh + "小时" + mm + "分钟" + ss + "秒");
             }
         }, 0, 1000);
-    }
-
-    /**
-     * 方式二： 设定时间戳，倒计时
-     * @param startTime  开始时间
-     * @param endTime    结束时间
-     * @param countdownListener 返回接受
-     */
-    public  void startCountdown(long startTime, long endTime, OnCountdownListener countdownListener) {
-        midTime = (endTime - startTime) / 1000;
-        while (midTime > 0) {
-            midTime--;
-            long hh = midTime / 60 / 60 % 60;
-            long mm = midTime / 60 % 60;
-            long ss = midTime % 60;
-            countdownListener.onListener(hh, mm, ss);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 
     /**
@@ -320,11 +325,83 @@ public class TimeUtils {
                 e.printStackTrace();
             }
         }
-
     }
+
+    /**
+     * 方式二： 设定时间戳，倒计时
+     *
+     * @param startTime         开始时间
+     * @param endTime           结束时间
+     * @param countdownListener 返回接受
+     */
+    public void startCountdown(long startTime, long endTime, OnCountdownListener countdownListener) {
+        midTime = (endTime - startTime) / 1000;
+        while (midTime > 0) {
+            midTime--;
+            long hh = midTime / 60 / 60 % 60;
+            long mm = midTime / 60 % 60;
+            long ss = midTime % 60;
+            countdownListener.onListener(hh, mm, ss);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 
     public interface OnCountdownListener {
-         void onListener(long hh, long mm, long ss);
+        void onListener(long hh, long mm, long ss);
     }
 
+
+    /**
+     * 根据时间戳来判断当前的时间是几天前,几分钟,刚刚
+     *
+     * @param long_time
+     * @param timeFormat
+     * @return
+     */
+    public  String getTimeStateNew(String long_time,String timeFormat) {
+        String long_by_13 = "1000000000000";
+        String long_by_10 = "1000000000";
+        if (Long.valueOf(long_time) / Long.valueOf(long_by_13) < 1) {
+            if (Long.valueOf(long_time) / Long.valueOf(long_by_10) >= 1) {
+                long_time = long_time + "000";
+            }
+        }
+        Timestamp time = new Timestamp(Long.valueOf(long_time));
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat(timeFormat);
+//    System.out.println("传递过来的时间:"+format.format(time));
+//    System.out.println("现在的时间:"+format.format(now));
+        long day_conver = 1000 * 60 * 60 * 24;
+        long hour_conver = 1000 * 60 * 60;
+        long min_conver = 1000 * 60;
+        long time_conver = now.getTime() - time.getTime();
+        long temp_conver;
+//    System.out.println("天数:"+time_conver/day_conver);
+        if ((time_conver / day_conver) < 3) {
+            temp_conver = time_conver / day_conver;
+            if (temp_conver <= 2 && temp_conver >= 1) {
+                return temp_conver + "天前";
+            } else {
+                temp_conver = (time_conver / hour_conver);
+                if (temp_conver >= 1) {
+                    return temp_conver + "小时前";
+                } else {
+                    temp_conver = (time_conver / min_conver);
+                    if (temp_conver >= 1) {
+                        return temp_conver + "分钟前";
+                    } else {
+                        return "刚刚";
+                    }
+                }
+            }
+        } else {
+            return format.format(time);
+        }
+    }
 }

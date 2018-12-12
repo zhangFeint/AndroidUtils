@@ -261,7 +261,6 @@ public class ViewUtils {
 
     public class URLImageParser implements Html.ImageGetter {
         TextView mTextView;
-
         public URLImageParser(TextView textView) {
             this.mTextView = textView;
         }

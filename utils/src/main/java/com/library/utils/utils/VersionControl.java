@@ -96,7 +96,7 @@ public class VersionControl {
 
     private void startDownload(String url){
         Intent intent = new Intent(context, DownLoadService.class);
-        intent.putExtra(DownLoadService.FILE_URL_SIGN, url);
+        intent.putExtra(DownLoadService.KEY_URL_SIGN, url);
         context.startService(intent);
     }
 

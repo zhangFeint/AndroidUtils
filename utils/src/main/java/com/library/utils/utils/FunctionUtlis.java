@@ -20,41 +20,9 @@ import java.util.TimerTask;
 public class FunctionUtlis {
     private static final String TAG = FunctionUtlis.class.getSimpleName();
 
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 启动页优先跳转 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-    /**
-     * 第一次运行跳转到引导页面
-     *
-     * @param context
-     * @param listener
-     */
-    private static final String STORAGE_FIRST_RUN_WIZARD_NAME = "share";
-    private static final String ISFIRSTRUN = "isFirstRun";
-    public static void getFirstRun(Context context, OnSkipListener listener) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(STORAGE_FIRST_RUN_WIZARD_NAME, context.MODE_PRIVATE); //1、实例化首选项存储
-        SharedPreferences.Editor editor = sharedPreferences.edit();  //2、使用edit()获取SharedPreferences.Editor对象，用来存储数据
-        boolean isFirstRun = sharedPreferences.getBoolean(ISFIRSTRUN, true);  //3、获取首选项存储的数据，第一个是nome，第二个是默认值
-        if (isFirstRun) {
-            Log.i(TAG, "：首次运行");
-            editor.putBoolean(ISFIRSTRUN, false); //5、进行首选项存储
-            editor.commit(); //6、进行首选项提交数据
-            listener.skipGuide(); // 第一次则跳转到引导页面
-        } else {
-            Log.i(TAG, "：多次运行");
-            listener.skipMain(); //如果是第二次启动则直接跳转到主页面
-        }
-    }
 
-    /**
-     * 程序进入时，第一跳转欢迎页面
-     */
-    public interface OnSkipListener {
-        void skipGuide();//跳转欢迎页面
-
-        void skipMain();//跳转主页面
-
-    }
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%双击退出函数%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

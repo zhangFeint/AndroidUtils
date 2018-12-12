@@ -7,6 +7,7 @@ import android.util.Log;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,33 +30,6 @@ public class StringUtil {
             stringUtil = new StringUtil();
         }
         return stringUtil;
-    }
-    //********************************************************************MD5加密***************************************************************************************
-
-    /**
-     * MD5加密方法, md5("pone" + uid);
-     */
-    public String md5(String string) {
-        if (TextUtils.isEmpty(string)) {
-            return "";
-        }
-        MessageDigest md5 = null;
-        try {
-            md5 = MessageDigest.getInstance("MD5");
-            byte[] bytes = md5.digest(string.getBytes());
-            String result = "";
-            for (byte b : bytes) {
-                String temp = Integer.toHexString(b & 0xff);
-                if (temp.length() == 1) {
-                    temp = "0" + temp;
-                }
-                result += temp;
-            }
-            return result;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
     //********************************************************************判断***************************************************************************************
@@ -175,17 +149,7 @@ public class StringUtil {
         return null;
     }
 
-    /**
-     * 时间戳转字符串
-     */
-    public String getTime(long timeMillis, String format) {
-        try {
-            return new SimpleDateFormat(format, Locale.getDefault()).format(timeMillis - TimeZone.getDefault().getRawOffset());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
+
 
     /**
      * 字符串转整形数组
@@ -455,8 +419,24 @@ public class StringUtil {
      * @param maximum 最大数 1-10的int随机数
      * @return
      */
-    public int getRandom(int maximum) {
+    public static int getRandom(int maximum) {
         return new Random().nextInt(maximum) + 1;
+    }
+    /**
+     * 返回一个&位随机数
+     *
+     * @param digits 位数
+     * @return
+     */
+    public static String getDigitsRandom(int digits) {
+        Random jjj = new Random();
+        if (digits == 0)
+            return "";
+        String jj = "";
+        for (int k = 0; k < digits; k++) {
+            jj = jj + jjj.nextInt(9);
+        }
+        return jj;
     }
 
     /**
@@ -500,9 +480,7 @@ public class StringUtil {
             int idx = Math.abs(random.nextInt()) % actLength;
             int startChar = startChars[idx];
             int endChar = endChars[idx];
-            char randChar = (char) (Math.abs(random.nextInt())
-                    % (endChar - startChar) + startChar);
-
+            char randChar = (char) (Math.abs(random.nextInt()) % (endChar - startChar) + startChar);
             sb.append(randChar);
         }
 
@@ -759,7 +737,7 @@ public class StringUtil {
      * @param paramName eg：province
      * @return 参数名对应的参数值 eg：guangdong
      */
-    public String findParamValue(String url, String paramName) {
+    public static String findParamValue(String url, String paramName) {
         Pattern pattern = Pattern.compile("(^|&|\\?)" + paramName + "=([^&]*)(&|$)");
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {
@@ -771,4 +749,7 @@ public class StringUtil {
         }
         return null;
     }
+
+
+
 }
