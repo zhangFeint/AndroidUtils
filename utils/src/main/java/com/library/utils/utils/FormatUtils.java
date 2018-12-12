@@ -14,6 +14,54 @@ import java.util.regex.Pattern;
 
 public class FormatUtils {
 
+    /**
+     * 银行卡
+     */
+    private static final String REGEX_BANK_CARD = "/^([1-9]{1})(\\d{14}|\\d{18})$/";
+    /**
+     * email格式
+     */
+    private static final String REGEX_EMAIL = "^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$";
+    /**
+     * 正则表达式：验证用户名
+     */
+    public static final String REGEX_USERNAME = "^[a-zA-Z]\\w{5,20}$";
+
+    /**
+     * 正则表达式：验证密码
+     */
+    public static final String REGEX_PASSWORD = "^[a-zA-Z0-9]{6,20}$";
+
+    /**
+     * 正则表达式：验证手机号
+     */
+    public static final String REGEX_MOBILE = "^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+
+
+    /**
+     * 正则表达式：验证汉字
+     */
+    public static final String REGEX_CHINESE = "^[\u4e00-\u9fa5],{0,}$";
+
+    /**
+     * 正则表达式：验证身份证
+     */
+    public static final String REGEX_ID_CARD = "(^\\d{18}$)|(^\\d{15}$)";
+//    //身份证 （正则表达式）
+//    private static final String REGEX_ID_CARD = "(^d{15}$)|(^d{17}([0-9]|X)$)";
+    /**
+     * 正则表达式：验证URL
+     */
+    public static final String REGEX_URL = "http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?";
+
+    /**
+     * 正则表达式：验证IP地址
+     */
+    public static final String REGEX_IP_ADDR = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
+    /**
+     * 正则表达式：固话
+     */
+    public static final String REGEX_FIX_PHONE = "^0\\d{2,3}(\\-)?\\d{7,8}$";
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%常用的数字格式%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     /**
@@ -27,6 +75,18 @@ public class FormatUtils {
      */
     public static String setReplace(int start, int end, String oldChar, String newChar) {
         return new StringBuilder(oldChar).replace(start, end, newChar).toString();
+    }
+
+    /**
+     * 替换的字符串
+     *
+     * @param sentence 句子
+     * @param oldChar  原
+     * @param newChar  新
+     * @return
+     */
+    public static String setReplace(String sentence, String oldChar, String newChar) {
+        return sentence.replace(oldChar, newChar);
     }
 
 
@@ -58,53 +118,14 @@ public class FormatUtils {
         return sMoney;
     }
 
-
     /**
-     * 验证手机号
+     * 验证
      *
-     * @param mobiles
+     * @param str
      * @return
      */
-    public boolean isMobileNO(String mobiles) {
-        return match("^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\\d{8}$", mobiles);
-    }
-
-    /**
-     * 身份证号校验
-     */
-    public boolean isIDcard(String str) {
-        String regex = "(^d{15}$)|(^d{17}([0-9]|X)$)";
+    public boolean isVerify(String str, String regex) {
         return match(regex, str);
-    }
-
-
-    /**
-     * 校验 银行卡卡号
-     */
-    public boolean checkBankCard(String cardId) {
-        return match("/^([1-9]{1})(\\d{14}|\\d{18})$/", cardId);
-    }
-
-    /**
-     * 固定电话校验
-     *
-     * @param phone 0371 -
-     * @return
-     */
-    public boolean isFixedTelephonee(String phone) {
-        String regex = "^0\\d{2,3}(\\-)?\\d{7,8}$";
-        return match(regex, phone);
-    }
-
-    /**
-     * 判断email格式是否正确
-     *
-     * @param email 69558409@qq.com
-     * @return
-     */
-    public boolean isEmail(String email) {
-        String regex = "^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$";
-        return match(regex, email);
     }
 
     /**
