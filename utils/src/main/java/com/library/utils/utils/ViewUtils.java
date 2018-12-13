@@ -27,17 +27,21 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
+import java.util.List;
 
 
 /**
@@ -316,5 +320,21 @@ public class ViewUtils {
         textView.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(activity, drawableId), null, null);
         textView.setText(text);
         listView.setEmptyView(textView);
+    }
+
+    /**
+     *  下拉列表适配器
+     * @param context
+     * @param spinner
+     * @param adapter
+     * @param list
+     */
+    public void loadSpinnerAdapter(Context context,Spinner spinner, ArrayAdapter<String> adapter, List<String> list){
+        //适配器
+        adapter= new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
+        //设置样式
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        spinner.setAdapter(adapter);
     }
 }

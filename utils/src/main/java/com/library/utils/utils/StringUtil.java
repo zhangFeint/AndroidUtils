@@ -446,7 +446,7 @@ public class StringUtil {
      * @param stringTypes 类型
      * @return
      */
-    public String getRandomString(int[] stringTypes, int length) {
+    public static String getRandomString(int[] stringTypes, int length) {
         int[] startChars = new int[100];
         int[] endChars = new int[100];
         int actLength = 0;
@@ -493,7 +493,7 @@ public class StringUtil {
      * @return
      */
     @SuppressLint("DefaultLocale")
-    public String getGUID() {
+    public static String getGUID() {
         UUID uid = UUID.randomUUID();
         return uid.toString().replaceAll("-", "").toUpperCase();
     }

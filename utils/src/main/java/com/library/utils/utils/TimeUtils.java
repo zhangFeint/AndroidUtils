@@ -1,6 +1,8 @@
 package com.library.utils.utils;
 
 
+import android.os.CountDownTimer;
+
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -72,14 +74,15 @@ public class TimeUtils {
         }
         return null;
     }
+
     /**
-     *将字符串转为时间戳
+     * 将字符串转为时间戳
      *
      * @param user_time "2018-12-9"
-     * @param format     TIME_FORMAT_10
+     * @param format    TIME_FORMAT_10
      * @return
      */
-    public  String getTimestamp(String user_time,String format) {
+    public String getTimestamp(String user_time, String format) {
         String re_time = null;
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         Date d;
@@ -273,58 +276,38 @@ public class TimeUtils {
      * @param args
      */
 //
-//    CountDownTimer timer = new CountDownTimer(240*1000, 1000) {
-//        @Override
-//        public void onTick(long millisUntilFinished) {
-//            // TODO Auto-generated method stub
-//            Toast.makeText(MainActivity.this, ""+ TimeUtils.getInstance().getStrTime(millisUntilFinished,TimeUtils.TIME_FORMAT_8), Toast.LENGTH_SHORT).show();
-//        }
 //
-//        @Override
-//        public void onFinish() {
-//        }
-//    }.start();
-    public Calendar calendar;
-    public Date date;
-    public long midTime;
+    public static long midTime;
 
+    public static void main(String[] args) {
+        TimeUtils timeUtils = TimeUtils.getInstance();
+        String longtime = timeUtils.getTimestamp("2018-12-11 06:10:12", TimeUtils.TIME_FORMAT_2);
+        String longtime2 = timeUtils.getTimestamp("2018-12-10 06:10:12", TimeUtils.TIME_FORMAT_2);
+        startCountdown(Long.parseLong(longtime2), Long.parseLong(longtime), new OnCountdownListener() {
+            @Override
+            public void onListener(long days, long hh, long mm, long ss) {
 
-    /**
-     * 方式三： 使用java.util.Timer类进行倒计时
-     */
-    private void startCountdown(long startTime, long endTime) {
-        midTime = (endTime - startTime) / 1000;
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                midTime--;
-                long hh = midTime / 60 / 60 % 60;
-                long mm = midTime / 60 % 60;
-                long ss = midTime % 60;
-                System.out.println("还剩" + hh + "小时" + mm + "分钟" + ss + "秒");
             }
-        }, 0, 1000);
+        });
     }
-
     /**
      * 方式一： 给定时长倒计时
      *
-     * @param time 60 * 60 * 60
+     * @param millisInFuture    总时间  240*1000
+     * @param countDownInterval 间隔时间 1000
      */
-    public void startCountdown(int time, OnCountdownListener countdownListener) {
-        while (time > 0) {
-            time--;
-            try {
-                Thread.sleep(1000);
-                int hh = time / 60 / 60 % 60;
-                int mm = time / 60 % 60;
-                int ss = time % 60;
-                System.out.println("还剩" + hh + "小时" + mm + "分钟" + ss + "秒");
-                countdownListener.onListener(hh, mm, ss);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    public  void startCountDownTimer(long millisInFuture, long countDownInterval, final OnCountdownListener countdownListener) {
+        new CountDownTimer(millisInFuture, countDownInterval) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // TODO Auto-generated method stub
+                getTimeFormat(millisUntilFinished,countdownListener);
             }
-        }
+
+            @Override
+            public void onFinish() {
+            }
+        }.start();
     }
 
     /**
@@ -334,14 +317,11 @@ public class TimeUtils {
      * @param endTime           结束时间
      * @param countdownListener 返回接受
      */
-    public void startCountdown(long startTime, long endTime, OnCountdownListener countdownListener) {
+    public void startCountdown2(long startTime, long endTime, OnCountdownListener countdownListener) {
         midTime = (endTime - startTime) / 1000;
         while (midTime > 0) {
             midTime--;
-            long hh = midTime / 60 / 60 % 60;
-            long mm = midTime / 60 % 60;
-            long ss = midTime % 60;
-            countdownListener.onListener(hh, mm, ss);
+            getTimeFormat(midTime,countdownListener);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -352,8 +332,32 @@ public class TimeUtils {
     }
 
 
+    /**
+     * 方式三： 使用java.util.Timer类进行倒计时
+     */
+    private static void startCountdown(long startTime, long endTime, final OnCountdownListener countdownListener) {
+        midTime = (endTime - startTime) / 1000;
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                midTime--;
+                getTimeFormat(midTime,countdownListener);
+            }
+        }, 0, 1000);
+    }
+
+    private static void getTimeFormat(long midTime, OnCountdownListener countdownListener) {
+        long days = midTime / (1000 * 60 * 60 * 24);
+        long hh = midTime / 60 / 60 % 60;
+        long mm = midTime / 60 % 60;
+        long ss = midTime % 60;
+        System.out.println("还剩" + days + "天" + hh + "小时" + mm + "分钟" + ss + "秒");
+        countdownListener.onListener(days,hh, mm, ss);
+    }
+
+
     public interface OnCountdownListener {
-        void onListener(long hh, long mm, long ss);
+        void onListener( long days,long hh, long mm, long ss);
     }
 
 
@@ -364,7 +368,7 @@ public class TimeUtils {
      * @param timeFormat
      * @return
      */
-    public  String getTimeStateNew(String long_time,String timeFormat) {
+    public String getTimeStateNew(String long_time, String timeFormat) {
         String long_by_13 = "1000000000000";
         String long_by_10 = "1000000000";
         if (Long.valueOf(long_time) / Long.valueOf(long_by_13) < 1) {
