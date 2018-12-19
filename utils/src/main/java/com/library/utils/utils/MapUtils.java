@@ -1,7 +1,9 @@
 package com.library.utils.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -242,8 +244,8 @@ public class MapUtils {
      * @return
      */
 
-    public static boolean isMapInstalled(String packageName) {
-        return new File("/data/data/" + packageName).exists();
+    public static boolean isMapInstalled(Context context,String packageName) {
+        return new File(context.getFilesDir().getPath()+ packageName).exists();
     }
 
     /**

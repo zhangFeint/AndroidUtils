@@ -1,4 +1,4 @@
-package com.library.utils.Service;
+package com.library.utils.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;

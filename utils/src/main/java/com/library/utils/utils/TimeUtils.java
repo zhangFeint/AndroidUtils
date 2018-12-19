@@ -56,8 +56,7 @@ public class TimeUtils {
      */
     public String getTime(String format) {
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat(format);
-            return formatter.format(new Date());
+            return getSimpleDateFormat(format).format(new Date());
         } catch (Exception ex) {
         }
         return null;
@@ -76,6 +75,26 @@ public class TimeUtils {
     }
 
     /**
+     * 格式
+     *
+     * @param format
+     * @return
+     */
+    public static SimpleDateFormat getSimpleDateFormat(String format) {
+        return getSimpleDateFormat(format, Locale.CHINA);
+    }
+
+    /**
+     * 格式
+     *
+     * @param format
+     * @return
+     */
+    public static SimpleDateFormat getSimpleDateFormat(String format, Locale locale) {
+        return new SimpleDateFormat(format, locale);
+    }
+
+    /**
      * 将字符串转为时间戳
      *
      * @param user_time "2018-12-9"
@@ -84,10 +103,9 @@ public class TimeUtils {
      */
     public String getTimestamp(String user_time, String format) {
         String re_time = null;
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
         Date d;
         try {
-            d = sdf.parse(user_time);
+            d = getSimpleDateFormat(format).parse(user_time);
             long l = d.getTime();
             String str = String.valueOf(l);
             re_time = str.substring(0, 10);
@@ -102,8 +120,7 @@ public class TimeUtils {
      * 将时间戳转为字符串 例如：  cc_time = 1291778220;
      */
     public String getStrTime(String timestamp, String format) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
-        String re_StrTime = sdf.format(new Date(Long.valueOf(timestamp) * 1000L));
+        String re_StrTime = getSimpleDateFormat(format).format(new Date(Long.valueOf(timestamp) * 1000L));
         return re_StrTime;
     }
 
@@ -223,12 +240,12 @@ public class TimeUtils {
      * 日期（天）相加减dayCalculate("2018-06-02",2)
      */
     public String dayCalculate(String current, int count) {
-        Date currentDate = getDate(current, "yyyy-MM-dd");  // 日期字符串转换为date类型
+        Date currentDate = getDate(current, TIME_FORMAT_10);  // 日期字符串转换为date类型
         Calendar mCalendar = Calendar.getInstance(); // 获取Calendar对象
         mCalendar.setTime(currentDate);  // 设置日期为当前已经选择的时间
         // 进行时间相加减操作
         mCalendar.add(Calendar.DAY_OF_MONTH, count);
-        String date = getDate(mCalendar.getTime(), "yyyy-MM-dd");
+        String date = getDate(mCalendar.getTime(), TIME_FORMAT_10);
         return date;
     }
 
@@ -253,7 +270,7 @@ public class TimeUtils {
      * compareDate("2018-06-02","2018-06-04",TimeUtils.TIME_FORMAT_10)
      */
     public int compareDate(String date1, String date2, String format) {
-        DateFormat df = new SimpleDateFormat(format);
+        DateFormat df = getSimpleDateFormat(format);
         try {
             Date dt1 = df.parse(date1);
             Date dt2 = df.parse(date2);
@@ -290,18 +307,19 @@ public class TimeUtils {
             }
         });
     }
+
     /**
      * 方式一： 给定时长倒计时
      *
      * @param millisInFuture    总时间  240*1000
      * @param countDownInterval 间隔时间 1000
      */
-    public  void startCountDownTimer(long millisInFuture, long countDownInterval, final OnCountdownListener countdownListener) {
+    public void startCountDownTimer(long millisInFuture, long countDownInterval, final OnCountdownListener countdownListener) {
         new CountDownTimer(millisInFuture, countDownInterval) {
             @Override
             public void onTick(long millisUntilFinished) {
                 // TODO Auto-generated method stub
-                getTimeFormat(millisUntilFinished,countdownListener);
+                getTimeFormat(millisUntilFinished, countdownListener);
             }
 
             @Override
@@ -321,7 +339,7 @@ public class TimeUtils {
         midTime = (endTime - startTime) / 1000;
         while (midTime > 0) {
             midTime--;
-            getTimeFormat(midTime,countdownListener);
+            getTimeFormat(midTime, countdownListener);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -341,7 +359,7 @@ public class TimeUtils {
         timer.schedule(new TimerTask() {
             public void run() {
                 midTime--;
-                getTimeFormat(midTime,countdownListener);
+                getTimeFormat(midTime, countdownListener);
             }
         }, 0, 1000);
     }
@@ -352,12 +370,12 @@ public class TimeUtils {
         long mm = midTime / 60 % 60;
         long ss = midTime % 60;
         System.out.println("还剩" + days + "天" + hh + "小时" + mm + "分钟" + ss + "秒");
-        countdownListener.onListener(days,hh, mm, ss);
+        countdownListener.onListener(days, hh, mm, ss);
     }
 
 
     public interface OnCountdownListener {
-        void onListener( long days,long hh, long mm, long ss);
+        void onListener(long days, long hh, long mm, long ss);
     }
 
 
@@ -378,7 +396,6 @@ public class TimeUtils {
         }
         Timestamp time = new Timestamp(Long.valueOf(long_time));
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        SimpleDateFormat format = new SimpleDateFormat(timeFormat);
 //    System.out.println("传递过来的时间:"+format.format(time));
 //    System.out.println("现在的时间:"+format.format(now));
         long day_conver = 1000 * 60 * 60 * 24;
@@ -405,7 +422,7 @@ public class TimeUtils {
                 }
             }
         } else {
-            return format.format(time);
+            return getSimpleDateFormat(timeFormat).format(time);
         }
     }
 }

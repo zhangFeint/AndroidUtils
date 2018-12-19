@@ -64,7 +64,6 @@ public class SubmitData {
      *
      * @param headers
      */
-    @Deprecated
     public void setHeaders(HashMap<String, String> headers) {
         this.headers = headers;
     }
@@ -83,6 +82,11 @@ public class SubmitData {
         }
 
     }
+
+    public void setFileBoby( String fileKey, File file) {
+        builder.addFormDataPart(fileKey, file.getName(), MultipartBody.create(MediaType.parse("*/*"), file)); // 参数分别为， 请求key ，文件名称 ， RequestBody
+    }
+
 
     /**
      * 请求体，json格式

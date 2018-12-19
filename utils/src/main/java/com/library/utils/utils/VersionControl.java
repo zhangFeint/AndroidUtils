@@ -1,5 +1,6 @@
 package com.library.utils.utils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,7 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import com.library.utils.Service.DownLoadService;
+import com.library.utils.service.DownLoadService;
 
 
 /**
@@ -23,7 +24,7 @@ import com.library.utils.Service.DownLoadService;
 public class VersionControl {
     private Context context;
     private final String VERSION_CODE = "VersionCode";
-    private final String STORAGE_NAME = "Version";
+
     private  String dialog_tible = "更新提示";
     private  String dialog_affirm = "立即更新";
     private  String dialog_cancel = "以后更新";
@@ -40,9 +41,9 @@ public class VersionControl {
      * @param url      apk文件的url
      */
     public void updateRecordVersionDialog(final int nVersion, String message, final String url){
-            SharedPreferences sharedPreferences = context.getSharedPreferences(STORAGE_NAME, context.MODE_PRIVATE);
-            final SharedPreferences.Editor editor = sharedPreferences.edit();
-            int saveVersion = sharedPreferences.getInt(VERSION_CODE, getAppVersionCode(context));
+        final SaveDataUtils saveData = new SaveDataUtils((Activity) context,SaveDataUtils.SAVE_VERSION);
+            int saveVersion = saveData.getInt(VERSION_CODE, getAppVersionCode(context));
+        saveData.setInt(VERSION_CODE, getAppVersionCode(context));
             if (nVersion > saveVersion) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setCancelable(false);
@@ -50,16 +51,16 @@ public class VersionControl {
                 builder.setMessage(message);
                 builder.setPositiveButton(dialog_affirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        editor.putInt(VERSION_CODE, nVersion);
-                        editor.commit();
+                        saveData.setInt(VERSION_CODE, nVersion);
+                        saveData.commit();
                         dialog.dismiss();
                         startDownload(url);
                     }
                 });
                 builder.setNegativeButton(dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        editor.putInt(VERSION_CODE, nVersion);
-                        editor.commit();
+                        saveData.setInt(VERSION_CODE, nVersion);
+                        saveData.commit();
                         dialog.dismiss();
                     }
                 });

@@ -32,17 +32,38 @@ public class SaveDataUtils {
      */
     public void setObject(String key, Object strObject) throws Exception {
         editor.putString(key, SerializeUtils.serialize(strObject));
+    }
+
+    /**
+     * 首选项保存
+     */
+    public void setInt(String key, int i) {
+        editor.putInt(key, i);
+    }
+
+    /**
+     * 首选项提交
+     */
+    public void commit() {
         editor.commit();
     }
 
     /**
      * 取出数据
+     *
      * @param key
      * @return
      * @throws Exception
      */
     public Object getObject(String key) throws Exception {
         return SerializeUtils.deSerialization(sp.getString(key, null));
+    }
+
+    /**
+     * 首选项保存
+     */
+    public int getInt(String key, int defValue) {
+        return sp.getInt(key, defValue);
     }
 
     /**
