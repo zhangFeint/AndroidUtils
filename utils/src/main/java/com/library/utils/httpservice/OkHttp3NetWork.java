@@ -38,7 +38,7 @@ public class OkHttp3NetWork {
      * 提交数据,带提示信息
      */
     public static void submitDialog(Context context, int requetWay, DialogControl control,  UploadDataAsyncTask.NetWorkInterface netWork) {
-        submitData(context,requetWay, LOADED_TIP,control, 25000, true, netWork);
+        submitData(context,requetWay, LOADED_TIP,control, 25000, false, netWork);
     }
     /**
      * 提交数据
