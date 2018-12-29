@@ -47,10 +47,8 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
         this.isShowDialog = isShowDialog;//是否创建 DialogControl
         this.control = control;
         this.requetWay = requetWay;
-        if (!isShowDialog) {
-            if (null != control) {
-                this.control.show(this, loadMsg);// 加载中文字
-            }
+        if (!isShowDialog && null != control) {
+            this.control.show(this, loadMsg);// 加载中文字
         }
     }
 
@@ -71,7 +69,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     protected String doInBackground(byte[]... params) {
         SubmitData data = netWork.getSubmitData();//获取提交数据信息
         HttpRequestUtils.setOvertime(overtime);
-        String result =HttpRequestUtils.getRequestRresults(data.getUrl(), data.getHeaders(), data.getBoby(),requetWay);
+        String result = HttpRequestUtils.getRequestRresults(data.getUrl(), data.getHeaders(), data.getBoby(), requetWay);
         if (!isShowDialog && null != control) {//捕获异常时关闭dialog
             control.done();
         }
