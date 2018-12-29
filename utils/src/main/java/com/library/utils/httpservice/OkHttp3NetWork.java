@@ -29,7 +29,7 @@ public class OkHttp3NetWork {
         netWork.result(HttpRequestUtils.readJson(context,localFile));     //返回数据  跳到本页面的handleOrderList方法里面 146line
     }
     /**
-     * 提交数据,带提示信息
+     * 提交数据,不带提示信息
      */
     public static void submitNoDialog(Context context, int requetWay, UploadDataAsyncTask.NetWorkInterface netWork) {
         submitData(context,requetWay, LOADED_TIP,null, 25000, false, netWork);
