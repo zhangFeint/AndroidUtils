@@ -70,6 +70,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     @Override
     protected String doInBackground(byte[]... params) {
         SubmitData data = netWork.getSubmitData();//获取提交数据信息
+        HttpRequestUtils.setOvertime(overtime);
         String result =HttpRequestUtils.getRequestRresults(data.getUrl(), data.getHeaders(), data.getBoby(),requetWay);
         if (!isShowDialog && null != control) {//捕获异常时关闭dialog
             control.done();

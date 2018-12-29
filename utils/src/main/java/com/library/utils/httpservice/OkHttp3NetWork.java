@@ -16,16 +16,6 @@ public class OkHttp3NetWork {
     private static final String NO_NETWORK_TEXT = "   没有网络能干啥，\n去设置中开启网络吧!";
     private static final String LOADED_TIP = "资源加载中,请稍后...";
 
-
-    /**
-     * 提交数据,带提示信息
-     */
-    public static void submitNoDialog(Context context, int requetWay, UploadDataAsyncTask.NetWorkInterface netWork) {
-        initNetworkAvailable(context);
-        UploadDataAsyncTask up = new UploadDataAsyncTask(context, LOADED_TIP, netWork,null, 25000, false, requetWay);
-        up.execute();
-    }
-
     /**
      * 访问本地xml信息，用来做测试
      *
@@ -38,7 +28,26 @@ public class OkHttp3NetWork {
         initNetworkAvailable(context);
         netWork.result(HttpRequestUtils.readJson(context,localFile));     //返回数据  跳到本页面的handleOrderList方法里面 146line
     }
-
+    /**
+     * 提交数据,带提示信息
+     */
+    public static void submitNoDialog(Context context, int requetWay, UploadDataAsyncTask.NetWorkInterface netWork) {
+        submitData(context,requetWay, LOADED_TIP,null, 25000, false, netWork);
+    }
+    /**
+     * 提交数据,带提示信息
+     */
+    public static void submitDialog(Context context, int requetWay, DialogControl control,  UploadDataAsyncTask.NetWorkInterface netWork) {
+        submitData(context,requetWay, LOADED_TIP,control, 25000, true, netWork);
+    }
+    /**
+     * 提交数据
+     */
+    public static void submitData(Context context, int requetWay, String loadMsg, DialogControl control, int overtime, boolean isShowDialog,  UploadDataAsyncTask.NetWorkInterface netWork) {
+        initNetworkAvailable(context);
+        UploadDataAsyncTask up = new UploadDataAsyncTask(context, loadMsg, netWork,control, overtime, isShowDialog, requetWay);
+        up.execute();
+    }
 
     /**
      * 下载文件
