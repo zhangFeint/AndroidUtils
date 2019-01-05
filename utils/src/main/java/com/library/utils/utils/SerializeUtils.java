@@ -35,7 +35,7 @@ public class SerializeUtils {
         objectOutputStream.close();
         byteArrayOutputStream.close();
         endTime = System.currentTimeMillis();
-        System.out.println("序列化耗时为" + (endTime - startTime));
+//        System.out.println("序列化耗时为" + (endTime - startTime));
         return serStr;
     }
 
@@ -55,7 +55,7 @@ public class SerializeUtils {
         objectInputStream.close();
         byteArrayInputStream.close();
         endTime = System.currentTimeMillis();
-        System.out.println("反序列化耗时为" + (endTime - startTime));
+//        System.out.println("反序列化耗时为" + (endTime - startTime));
         return objectInputStream.readObject();
     }
 }

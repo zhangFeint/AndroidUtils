@@ -55,24 +55,10 @@ public class TimeUtils {
      * 获取当前时间
      */
     public String getTime(String format) {
-        try {
-            return getSimpleDateFormat(format).format(new Date());
-        } catch (Exception ex) {
-        }
-        return null;
+        return getSimpleDateFormat(format).format(new Date());
+//        return new SimpleDateFormat(format, Locale.getDefault()).format(new Date(getTimestamp()));
     }
 
-    /**
-     * 获取当前时间
-     */
-    public String getCurrentTime(String format) {
-        try {
-            SimpleDateFormat sf = new SimpleDateFormat(format, Locale.getDefault());
-            return sf.format(new Date(getTimestamp()));
-        } catch (Exception ex) {
-        }
-        return null;
-    }
 
     /**
      * 格式
@@ -99,22 +85,17 @@ public class TimeUtils {
      *
      * @param user_time "2018-12-9"
      * @param format    TIME_FORMAT_10
-     * @return
+     * @return 1544307012
      */
-    public String getTimestamp(String user_time, String format) {
+    public String getTimestamp(String user_time, String format) throws ParseException {
         String re_time = null;
         Date d;
-        try {
-            d = getSimpleDateFormat(format).parse(user_time);
-            long l = d.getTime();
-            String str = String.valueOf(l);
-            re_time = str.substring(0, 10);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        d = getSimpleDateFormat(format).parse(user_time);
+        long l = d.getTime();
+        String str = String.valueOf(l);
+        re_time = str.substring(0, 10);
         return re_time;
     }
-
 
     /**
      * 将时间戳转为字符串 例如：  cc_time = 1291778220;
@@ -128,53 +109,36 @@ public class TimeUtils {
      * 时间戳转字符串
      */
     public String getTime(long timeMillis, String format) {
-        try {
-            return new SimpleDateFormat(format, Locale.getDefault()).format(timeMillis - TimeZone.getDefault().getRawOffset());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
+        return new SimpleDateFormat(format, Locale.getDefault()).format(timeMillis - TimeZone.getDefault().getRawOffset());
     }
 
 
     /**
      * 日期字符串转成指定格式的日期字符串 getTimeForFormat("2018-06-02",TimeUtils.TIME_FORMAT_10,TimeUtils.TIME_FORMAT_13)
      */
-    public String getTimeForFormat(String str, String currentFormat, String format) {
-        try {
-            Date date = new SimpleDateFormat(currentFormat, Locale.getDefault()).parse(str.trim());
-            return new SimpleDateFormat(format, Locale.getDefault()).format(date);
-        } catch (Exception ex) {
-        }
-        return null;
+    public String getTimeForFormat(String str, String currentFormat, String format) throws ParseException {
+        Date date = new SimpleDateFormat(currentFormat, Locale.getDefault()).parse(str.trim());
+        return new SimpleDateFormat(format, Locale.getDefault()).format(date);
     }
 
     /**
      * 字符串转日期getDate("2018-06-02",TimeUtils.TIME_FORMAT_10)
      */
-    public Date getDate(String str, String format) {
-        try {
-            return new SimpleDateFormat(format, Locale.getDefault()).parse(str.trim());
-        } catch (Exception ex) {
-        }
-        return null;
+    public Date getDate(String str, String format) throws ParseException {
+        return new SimpleDateFormat(format, Locale.getDefault()).parse(str.trim());
     }
 
     /**
      * 日期转字符串
      */
     public String getDate(Date data, String format) {
-        try {
-            return new SimpleDateFormat(format, Locale.getDefault()).format(data);
-        } catch (Exception ex) {
-        }
-        return null;
+        return new SimpleDateFormat(format, Locale.getDefault()).format(data);
     }
 
     /**
      * 获取年月份、星期
      */
-    public String getStringData() {
+    public TimeBean getStringData() {
         String mYear, mMonth, mDay, mWay;
         final Calendar c = Calendar.getInstance();
         c.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
@@ -197,32 +161,8 @@ public class TimeUtils {
         } else if ("7".equals(mWay)) {
             mWay = "六";
         }
-        return mYear + "年" + mMonth + "月" + mDay + "日" + "/星期" + mWay;
-    }
-
-    /**
-     * 获取星期
-     */
-    public String getDayOfWeek() {
-        String mWay;
-        final Calendar c = Calendar.getInstance();
-        mWay = String.valueOf(c.get(Calendar.DAY_OF_WEEK));
-        if ("1".equals(mWay)) {
-            mWay = "天";
-        } else if ("2".equals(mWay)) {
-            mWay = "一";
-        } else if ("3".equals(mWay)) {
-            mWay = "二";
-        } else if ("4".equals(mWay)) {
-            mWay = "三";
-        } else if ("5".equals(mWay)) {
-            mWay = "四";
-        } else if ("6".equals(mWay)) {
-            mWay = "五";
-        } else if ("7".equals(mWay)) {
-            mWay = "六";
-        }
-        return mWay;
+//        mYear + "年" + mMonth + "月" + mDay + "日" + "/星期" + mWay
+        return new TimeBean(mYear, mMonth, mDay, mWay);
     }
 
 
@@ -239,7 +179,7 @@ public class TimeUtils {
     /**
      * 日期（天）相加减dayCalculate("2018-06-02",2)
      */
-    public String dayCalculate(String current, int count) {
+    public String dayCalculate(String current, int count) throws ParseException {
         Date currentDate = getDate(current, TIME_FORMAT_10);  // 日期字符串转换为date类型
         Calendar mCalendar = Calendar.getInstance(); // 获取Calendar对象
         mCalendar.setTime(currentDate);  // 设置日期为当前已经选择的时间
@@ -252,15 +192,11 @@ public class TimeUtils {
     /**
      * 日期（月份）相加减monthCalculate("2018-06-02",2)
      */
-    public String monthCalculate(String current, int count) {
-        // 日期字符串转换为date类型
-        Date currentDate = getDate(current, "yyyy-MM");
-        // 获取Calendar对象
-        Calendar mCalendar = Calendar.getInstance();
-        // 设置日期为当前已经选择的时间
-        mCalendar.setTime(currentDate);
-        // 进行时间相加减操作
-        mCalendar.add(Calendar.MONTH, count);
+    public String monthCalculate(String current, int count) throws ParseException {
+        Date currentDate = getDate(current, "yyyy-MM");  // 日期字符串转换为date类型
+        Calendar mCalendar = Calendar.getInstance();    // 获取Calendar对象
+        mCalendar.setTime(currentDate); // 设置日期为当前已经选择的时间
+        mCalendar.add(Calendar.MONTH, count);  // 进行时间相加减操作
         String date = getDate(mCalendar.getTime(), "yyyy-MM");
         return date;
     }
@@ -268,23 +204,23 @@ public class TimeUtils {
     /**
      * 日期大小比较 date1大于date2返回1； date1小于date2返回-1 date1等于date2返回0
      * compareDate("2018-06-02","2018-06-04",TimeUtils.TIME_FORMAT_10)
+     *
+     * @param date1  "2018-06-02"
+     * @param date2  "2018-06-04"
+     * @param format 时间格式
+     * @return 1 ：大   0 ：等于   -1:1小
      */
-    public int compareDate(String date1, String date2, String format) {
+    public int compareDate(String date1, String date2, String format) throws ParseException {
         DateFormat df = getSimpleDateFormat(format);
-        try {
-            Date dt1 = df.parse(date1);
-            Date dt2 = df.parse(date2);
-            if (dt1.getTime() > dt2.getTime()) {
-                return 1;
-            } else if (dt1.getTime() < dt2.getTime()) {
-                return 2;
-            } else {
-                return 0;
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        Date dt1 = df.parse(date1);
+        Date dt2 = df.parse(date2);
+        if (dt1.getTime() > dt2.getTime()) {
+            return 1;
+        } else if (dt1.getTime() < dt2.getTime()) {
+            return 2;
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     /**
@@ -296,17 +232,6 @@ public class TimeUtils {
 //
     public static long midTime;
 
-    public static void main(String[] args) {
-        TimeUtils timeUtils = TimeUtils.getInstance();
-        String longtime = timeUtils.getTimestamp("2018-12-11 06:10:12", TimeUtils.TIME_FORMAT_2);
-        String longtime2 = timeUtils.getTimestamp("2018-12-10 06:10:12", TimeUtils.TIME_FORMAT_2);
-        startCountdown(Long.parseLong(longtime2), Long.parseLong(longtime), new OnCountdownListener() {
-            @Override
-            public void onListener(long days, long hh, long mm, long ss) {
-
-            }
-        });
-    }
 
     /**
      * 方式一： 给定时长倒计时
@@ -382,8 +307,8 @@ public class TimeUtils {
     /**
      * 根据时间戳来判断当前的时间是几天前,几分钟,刚刚
      *
-     * @param long_time
-     * @param timeFormat
+     * @param long_time  时间戳 1544307012
+     * @param timeFormat 时间格式
      * @return
      */
     public String getTimeStateNew(String long_time, String timeFormat) {
@@ -423,6 +348,52 @@ public class TimeUtils {
             }
         } else {
             return getSimpleDateFormat(timeFormat).format(time);
+        }
+    }
+
+    public class TimeBean {
+        String year, month, day, week;
+
+        public TimeBean() {
+        }
+
+        public TimeBean(String year, String month, String day, String week) {
+            this.year = year;
+            this.month = month;
+            this.day = day;
+            this.week = week;
+        }
+
+        public String getYear() {
+            return year;
+        }
+
+        public void setYear(String year) {
+            this.year = year;
+        }
+
+        public String getMonth() {
+            return month;
+        }
+
+        public void setMonth(String month) {
+            this.month = month;
+        }
+
+        public String getDay() {
+            return day;
+        }
+
+        public void setDay(String day) {
+            this.day = day;
+        }
+
+        public String getWeek() {
+            return week;
+        }
+
+        public void setWeek(String week) {
+            this.week = week;
         }
     }
 }

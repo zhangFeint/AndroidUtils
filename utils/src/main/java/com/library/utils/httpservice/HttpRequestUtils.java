@@ -248,7 +248,7 @@ public class HttpRequestUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) { // 下载失败
-                listener.onDownloadFailed();
+                listener.onDownloadFailed(call,e);
             }
 
             @Override
@@ -280,13 +280,10 @@ public class HttpRequestUtils {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    try {
                         if (is != null)
                             is.close();
                         if (fos != null)
                             fos.close();
-                    } catch (IOException e) {
-                    }
                 }
             }
         });
@@ -322,7 +319,7 @@ public class HttpRequestUtils {
         void onDownloading(int progress);
 
         //················下载失败·················
-        void onDownloadFailed();
+        void onDownloadFailed(Call call, IOException e);
     }
 
 

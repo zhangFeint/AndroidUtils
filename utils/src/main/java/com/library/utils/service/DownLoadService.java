@@ -14,6 +14,9 @@ import com.library.utils.httpservice.OkHttp3NetWork;
 import com.library.utils.utils.SystemUtils;
 
 import java.io.File;
+import java.io.IOException;
+
+import okhttp3.Call;
 
 /**
  * 软件下载安装
@@ -56,7 +59,6 @@ public class DownLoadService extends Service {
         OkHttp3NetWork.submitDownloadFile(this, url, HttpRequestUtils.FILE_SAVE_CATALOGUE, new HttpRequestUtils.OnDownloadListener() {
             @Override
             public void onDownloadSuccess(File file) {
-                Log.i(TAG, "请求成功");
                 ProgressNotification.getInstance().cancelNotification();
                 DownLoadService.this.stopSelf();
                 SystemUtils.getInstance().installApk(mContext, file);  // 安装软件
@@ -68,8 +70,7 @@ public class DownLoadService extends Service {
             }
 
             @Override
-            public void onDownloadFailed() {
-                Log.i(TAG, "请求失败");
+            public void onDownloadFailed(Call call, IOException e) {
                 ProgressNotification.getInstance().cancelNotification();
             }
         });

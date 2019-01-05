@@ -17,14 +17,10 @@ import java.util.TimerTask;
 /**
  * 功能模块
  */
+@Deprecated
 public class FunctionUtlis {
     private static final String TAG = FunctionUtlis.class.getSimpleName();
-
-
-
-
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%双击退出函数%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
     /**
      * 双击退出函数
@@ -96,53 +92,6 @@ public class FunctionUtlis {
                 }).show();
     }
 
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%登录页面记住密码功能%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    private static SharedPreferences sharedPreferences;
-    private static final String STORAGE_NAME = "Remember";
-
-    private static final String SAVE_USER = "user";
-    private static final String SAVE_PASSWORD = "password";
-
-    /**
-     * @param activity
-     * @param isSave   保存账号密码： true  不保存： false
-     * @param user
-     * @param password
-     */
-    public static void saveAccount(Activity activity, boolean isSave, String user, String password) {
-        sharedPreferences = activity.getSharedPreferences(STORAGE_NAME, activity.MODE_PRIVATE); //1、实例化首选项存储
-        SharedPreferences.Editor editor = sharedPreferences.edit();  //2、使用edit()获取SharedPreferences.Editor对象，用来存储数据
-        if (isSave) {
-            editor.putString(SAVE_USER, user);
-            editor.putString("", password);
-            editor.commit(); //6、进行首选项提交数据
-        } else {
-            editor.putString(SAVE_USER, "");
-            editor.putString(SAVE_PASSWORD, "");
-            editor.commit(); //6、进行首选项提交数据
-        }
-
-    }
-
-    public static String getAccounts() {
-        return sharedPreferences == null ? "" : sharedPreferences.getString(SAVE_USER, "");
-    }
-
-    public static String getPasswords() {
-        return sharedPreferences == null ? "" : sharedPreferences.getString(SAVE_PASSWORD, "");
-    }
-
-
-    /**
-     *EditText提供了一个android:digits配置，它表示EditText能够接受的字符集合。
-     * 场景一：只允许输入数字android:digits="0123456789"
-     * 场景二：只允许输入数字和英文字母 android:digits="0123456789abcdefghigjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-     * 场景三：只允许输入数字，英文字母和@.两个符号android:digits="0123456789abcdefghigjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@."
-     *
-     */
-
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%改变矢量图形的颜色%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 }
