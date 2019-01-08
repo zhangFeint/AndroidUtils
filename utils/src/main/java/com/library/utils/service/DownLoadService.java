@@ -79,7 +79,6 @@ public class DownLoadService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;

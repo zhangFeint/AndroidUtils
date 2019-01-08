@@ -419,7 +419,7 @@ public class StringUtil {
      * @param maximum 最大数 1-10的int随机数
      * @return
      */
-    public static int getRandom(int maximum) {
+    public  int getRandom(int maximum) {
         return new Random().nextInt(maximum) + 1;
     }
     /**
@@ -428,7 +428,7 @@ public class StringUtil {
      * @param digits 位数
      * @return
      */
-    public static String getDigitsRandom(int digits) {
+    public  String getDigitsRandom(int digits) {
         Random jjj = new Random();
         if (digits == 0)
             return "";
@@ -446,7 +446,7 @@ public class StringUtil {
      * @param stringTypes 类型
      * @return
      */
-    public static String getRandomString(int[] stringTypes, int length) {
+    public  String getRandomString(int[] stringTypes, int length) {
         int[] startChars = new int[100];
         int[] endChars = new int[100];
         int actLength = 0;
@@ -493,7 +493,7 @@ public class StringUtil {
      * @return
      */
     @SuppressLint("DefaultLocale")
-    public static String getGUID() {
+    public  String getGUID() {
         UUID uid = UUID.randomUUID();
         return uid.toString().replaceAll("-", "").toUpperCase();
     }
