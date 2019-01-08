@@ -13,15 +13,26 @@ import java.util.regex.Pattern;
  */
 
 public class FormatUtils {
+    private static FormatUtils formatUtils;
+
+    /**
+     * 单例模式
+     */
+    public static FormatUtils getInstance() {
+        if (formatUtils == null) {
+            formatUtils = new FormatUtils();
+        }
+        return formatUtils;
+    }
 
     /**
      * 银行卡
      */
-    private static final String REGEX_BANK_CARD = "/^([1-9]{1})(\\d{14}|\\d{18})$/";
+    public static final String REGEX_BANK_CARD = "/^([1-9]{1})(\\d{14}|\\d{18})$/";
     /**
      * email格式
      */
-    private static final String REGEX_EMAIL = "^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$";
+    public static final String REGEX_EMAIL = "^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$";
     /**
      * 正则表达式：验证用户名
      */
@@ -73,7 +84,7 @@ public class FormatUtils {
      * @param newChar 替换的字符
      * @return
      */
-    public static String setReplace(int start, int end, String oldChar, String newChar) {
+    public  String setReplace(int start, int end, String oldChar, String newChar) {
         return new StringBuilder(oldChar).replace(start, end, newChar).toString();
     }
 
@@ -85,7 +96,7 @@ public class FormatUtils {
      * @param newChar  新
      * @return
      */
-    public static String setReplace(String sentence, String oldChar, String newChar) {
+    public  String setReplace(String sentence, String oldChar, String newChar) {
         return sentence.replace(oldChar, newChar);
     }
 
@@ -96,7 +107,7 @@ public class FormatUtils {
      * @param str
      * @return
      */
-    public static String setMoneyFormat(String str) {
+    public  String setMoneyFormat(String str) {
         return setMoneyFormat(Double.parseDouble(str));
     }
 
@@ -106,14 +117,14 @@ public class FormatUtils {
      * @param doubles
      * @return
      */
-    public static String setMoneyFormat(Double doubles) {
+    public  String setMoneyFormat(Double doubles) {
         return new DecimalFormat("0.00").format(doubles);
     }
 
     /**
      * 金钱格式化
      */
-    public static String setMoneyFormat(float money) {
+    public  String setMoneyFormat(float money) {
         String sMoney = new DecimalFormat("##0.00").format(money);
         return sMoney;
     }
