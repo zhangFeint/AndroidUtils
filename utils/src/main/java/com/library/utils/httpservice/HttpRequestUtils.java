@@ -68,22 +68,18 @@ public class HttpRequestUtils {
 
     public static String getRequestRresults(String url, HashMap<String, String> headers, RequestBody requestBody, int mode) {
         String result = null;
-        if (requestBody == null) {
-            FormBody.Builder formBodyBuilder = new FormBody.Builder();
-            requestBody = formBodyBuilder.build();
-        }
         switch (mode) {
             case REQUEST_GET:
                 result = HttpRequestUtils.doGet(url, headers);
                 break;
             case REQUEST_POST:
-                result = HttpRequestUtils.doPost(url, headers, requestBody);
+                result = HttpRequestUtils.doPost(url, headers, requestBody == null? new FormBody.Builder().build():requestBody);
                 break;
             case REQUEST_PUT:
-                result = HttpRequestUtils.doPut(url, headers, requestBody);
+                result = HttpRequestUtils.doPut(url, headers, requestBody == null? new FormBody.Builder().build():requestBody);
                 break;
             case REQUEST_DELETE:
-                result = HttpRequestUtils.doDelete(url, headers, requestBody);
+                result = HttpRequestUtils.doDelete(url, headers, requestBody == null? new FormBody.Builder().build():requestBody);
                 break;
         }
         return result;
