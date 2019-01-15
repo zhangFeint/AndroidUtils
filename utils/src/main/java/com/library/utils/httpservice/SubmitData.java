@@ -32,9 +32,6 @@ public class SubmitData {
     private RequestBody body;
     private FormBody.Builder formBody;
     private MultipartBody.Builder builder;
-    public static final int MODE_FORM = 0;
-    public static final int MODE_JSON = 1;
-    private int mode = 0;
 
     /**
      * @param url
@@ -43,14 +40,6 @@ public class SubmitData {
         this.url = url;
 
 
-    }
-
-    /**
-     * @param mode
-     */
-    @Deprecated
-    public void setMode(int mode) {
-        this.mode = mode;
     }
 
     /**
@@ -78,7 +67,6 @@ public class SubmitData {
      * @param map
      */
     public void setBoby(HashMap<String, String> map) {
-        mode = MODE_JSON;
         formBody = new FormBody.Builder();
         if (map != null) {
             for (Map.Entry entry : map.entrySet()) {//追加表单信息
@@ -95,7 +83,6 @@ public class SubmitData {
      */
     public void setJosnBoby(HashMap<String, String> map) {
         //TODO：
-        mode = MODE_JSON;
         JSONObject json = new JSONObject(map);
         MediaType JSON = MediaType.parse("application/json; charset=" + charset);
         body = RequestBody.create(JSON, String.valueOf(json));
@@ -109,7 +96,6 @@ public class SubmitData {
      * @param file
      */
     public void setFileBoby(HashMap<String, String> map, String fileKey, File file) {
-        mode = MODE_FORM;
         builder = new MultipartBody.Builder().setType(MultipartBody.FORM);//MultipartBody可以构建与HTML文件上传格式兼容的复杂请求体
         if (map != null) {
             for (Map.Entry entry : map.entrySet()) {//追加表单信息
