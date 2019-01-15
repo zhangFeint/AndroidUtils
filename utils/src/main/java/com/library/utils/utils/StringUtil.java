@@ -42,6 +42,19 @@ public class StringUtil {
         return null == str || "".equals(str) || str.length() == 0 ? true : false;
     }
 
+    /**
+     * 判断对象是否为空
+     */
+    public boolean isEmpty(Object obj) {
+        return null == obj || "" == obj ? true : false;
+    }
+
+    /**
+     * 去掉空格、判断字符串是否为空
+     * @param str
+     * @param trim
+     * @return
+     */
     public boolean isEmpty(String str, boolean trim) {
         if (trim) {
             return null == str.trim() || "".equals(str.trim()) || str.trim().length() == 0 ? true : false;
@@ -49,12 +62,6 @@ public class StringUtil {
         return null == str || "".equals(str) || str.length() == 0 ? true : false;
     }
 
-    /**
-     * 判断对象是否为空
-     */
-    public boolean isEmpty(Object obj) {
-        return null == obj || "" == obj ? true : false;
-    }
 
     /**
      * 判断字符串是否为数字
@@ -139,6 +146,18 @@ public class StringUtil {
     }
 
     /**
+     * 最小几位数  001
+     * @param hourOfDay  1
+     * @param length    3
+     */
+    public void  getMinimum(int hourOfDay,int length){
+        String tempNum = hourOfDay+"";
+        while(tempNum.length() < length){
+            tempNum = "0" + tempNum;
+        }
+    }
+
+    /**
      * 字符串转整形
      */
     public Integer getInt(String str) {
@@ -148,7 +167,6 @@ public class StringUtil {
         }
         return null;
     }
-
 
 
     /**
@@ -419,16 +437,17 @@ public class StringUtil {
      * @param maximum 最大数 1-10的int随机数
      * @return
      */
-    public  int getRandom(int maximum) {
+    public int getRandom(int maximum) {
         return new Random().nextInt(maximum) + 1;
     }
+
     /**
      * 返回一个&位随机数
      *
      * @param digits 位数
      * @return
      */
-    public  String getDigitsRandom(int digits) {
+    public String getDigitsRandom(int digits) {
         Random jjj = new Random();
         if (digits == 0)
             return "";
@@ -446,7 +465,7 @@ public class StringUtil {
      * @param stringTypes 类型
      * @return
      */
-    public  String getRandomString(int[] stringTypes, int length) {
+    public String getRandomString(int[] stringTypes, int length) {
         int[] startChars = new int[100];
         int[] endChars = new int[100];
         int actLength = 0;
@@ -493,7 +512,7 @@ public class StringUtil {
      * @return
      */
     @SuppressLint("DefaultLocale")
-    public  String getGUID() {
+    public String getGUID() {
         UUID uid = UUID.randomUUID();
         return uid.toString().replaceAll("-", "").toUpperCase();
     }
@@ -749,7 +768,6 @@ public class StringUtil {
         }
         return null;
     }
-
 
 
 }
