@@ -51,6 +51,7 @@ public class StringUtil {
 
     /**
      * 去掉空格、判断字符串是否为空
+     *
      * @param str
      * @param trim
      * @return
@@ -147,14 +148,16 @@ public class StringUtil {
 
     /**
      * 最小几位数  001
-     * @param hourOfDay  1
+     *
+     * @param hourOfDay 1
      * @param length    3
      */
-    public void  getMinimum(int hourOfDay,int length){
-        String tempNum = hourOfDay+"";
-        while(tempNum.length() < length){
+    public String getMinimum(int hourOfDay, int length) {
+        String tempNum = hourOfDay + "";
+        while (tempNum.length() < length) {
             tempNum = "0" + tempNum;
         }
+        return tempNum;
     }
 
     /**
@@ -358,7 +361,27 @@ public class StringUtil {
         }
         return sb.toString();
     }
+    /**
+     * 转 Unicode
+     *
+     * @param strText
+     * @return
+     */
+    public String toUnicode(String strText) {
+        StringBuilder sb = new StringBuilder();
 
+        for (int i = 0; i < strText.length(); i++) {
+            char c = strText.charAt(i);
+            int intAsc = c;
+            if (intAsc > 128) {
+                sb.append("\\u" + Integer.toHexString(intAsc));
+            } else {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
+    }
     /**
      * 更改编码
      *
@@ -392,55 +415,30 @@ public class StringUtil {
         return oldString;
     }
 
-    /**
-     * @param regex    正则表达
-     * @param patterns
-     * @return
-     */
-    public boolean matchPattern(String regex, String[] patterns) {
-        if ((regex == null) || (patterns == null))
-            return false;
-        for (String p : patterns) {
-            if (matchPattern(regex, p))
-                return true;
-        }
-        return false;
-    }
 
-    public boolean matchPattern(String str, String pattern) {
-        return pattern == null ? false : Pattern.matches(pattern, str);
-    }
+
 
     /**
-     * @param strText
-     * @return
-     */
-    public String toUnicode(String strText) {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < strText.length(); i++) {
-            char c = strText.charAt(i);
-            int intAsc = c;
-            if (intAsc > 128) {
-                sb.append("\\u" + Integer.toHexString(intAsc));
-            } else {
-                sb.append(c);
-            }
-        }
-
-        return sb.toString();
-    }
-
-    /**
-     * 随机
+     * 获取[0,n)之间的一个随机整数
      *
      * @param maximum 最大数 1-10的int随机数
      * @return
      */
     public int getRandom(int maximum) {
+//        return (int) (Math.random() * maximum);
         return new Random().nextInt(maximum) + 1;
     }
 
+    /**
+     * /获取[m,n]之间的随机数（0<=m<=n）
+     *
+     * @param m
+     * @param n
+     * @return
+     */
+    public static int getRandomBetweenNumbers(int m,int n){
+        return (int)(m + Math.random() * (n - m + 1));
+    }
     /**
      * 返回一个&位随机数
      *
@@ -459,50 +457,18 @@ public class StringUtil {
     }
 
     /**
-     * 随机
-     *
-     * @param length      长度
-     * @param stringTypes 类型
+     * 获取指定位数的随机字符串(包含小写字母、大写字母、数字,0<length)
+     * @param KeyString  = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 随机字符串的随机字符库
+     * @param length
      * @return
      */
-    public String getRandomString(int[] stringTypes, int length) {
-        int[] startChars = new int[100];
-        int[] endChars = new int[100];
-        int actLength = 0;
-
-        for (int i = 0; i < stringTypes.length; i++) {
-            if (actLength > startChars.length)
-                break;
-            if (stringTypes[i] == 2) {
-                startChars[actLength] = 19968;
-                endChars[actLength] = 40880;
-
-                actLength++;
-            } else if (stringTypes[i] == 1) {
-                startChars[actLength] = 97;
-                endChars[actLength] = 122;
-                actLength++;
-            } else if (stringTypes[i] == 0) {
-                startChars[actLength] = 65;
-                endChars[actLength] = 90;
-                actLength++;
-            } else if (stringTypes[i] == 3) {
-                startChars[actLength] = 48;
-                endChars[actLength] = 57;
-                actLength++;
-            }
-        }
-        Random random = new Random();
+    //
+    public static String getRandomString(String KeyString, int length) {
         StringBuffer sb = new StringBuffer();
-
+        int len = KeyString.length();
         for (int i = 0; i < length; i++) {
-            int idx = Math.abs(random.nextInt()) % actLength;
-            int startChar = startChars[idx];
-            int endChar = endChars[idx];
-            char randChar = (char) (Math.abs(random.nextInt()) % (endChar - startChar) + startChar);
-            sb.append(randChar);
+            sb.append(KeyString.charAt((int) Math.round(Math.random() * (len - 1))));
         }
-
         return sb.toString();
     }
 
@@ -513,8 +479,7 @@ public class StringUtil {
      */
     @SuppressLint("DefaultLocale")
     public String getGUID() {
-        UUID uid = UUID.randomUUID();
-        return uid.toString().replaceAll("-", "").toUpperCase();
+        return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
     }
 
     /**
@@ -620,7 +585,30 @@ public class StringUtil {
         return sb.toString();
     }
 
+    /**
+     * 替换的字符串
+     *
+     * @param start   开始的位置
+     * @param end     结束的位置
+     * @param oldChar 原字符串
+     * @param newChar 替换的字符
+     * @return
+     */
+    public  String setReplace(int start, int end, String oldChar, String newChar) {
+        return new StringBuilder(oldChar).replace(start, end, newChar).toString();
+    }
 
+    /**
+     * 替换的字符串
+     *
+     * @param sentence 句子
+     * @param oldChar  原
+     * @param newChar  新
+     * @return
+     */
+    public  String setReplace(String sentence, String oldChar, String newChar) {
+        return sentence.replace(oldChar, newChar);
+    }
     /**
      * 去掉
      *
@@ -631,6 +619,12 @@ public class StringUtil {
         return escape(src, "%");
     }
 
+    /**
+     *  去掉 某个字段
+     * @param src  1000%
+     * @param pre "%"
+     * @return
+     */
     public String escape(String src, String pre) {
         if (src == null) {
             return null;
@@ -756,7 +750,7 @@ public class StringUtil {
      * @param paramName eg：province
      * @return 参数名对应的参数值 eg：guangdong
      */
-    public static String findParamValue(String url, String paramName) {
+    public  String findParamValue(String url, String paramName) {
         Pattern pattern = Pattern.compile("(^|&|\\?)" + paramName + "=([^&]*)(&|$)");
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {

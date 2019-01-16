@@ -75,30 +75,7 @@ public class FormatUtils {
     public static final String REGEX_FIX_PHONE = "^0\\d{2,3}(\\-)?\\d{7,8}$";
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%常用的数字格式%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    /**
-     * 替换的字符串
-     *
-     * @param start   开始的位置
-     * @param end     结束的位置
-     * @param oldChar 原字符串
-     * @param newChar 替换的字符
-     * @return
-     */
-    public  String setReplace(int start, int end, String oldChar, String newChar) {
-        return new StringBuilder(oldChar).replace(start, end, newChar).toString();
-    }
 
-    /**
-     * 替换的字符串
-     *
-     * @param sentence 句子
-     * @param oldChar  原
-     * @param newChar  新
-     * @return
-     */
-    public  String setReplace(String sentence, String oldChar, String newChar) {
-        return sentence.replace(oldChar, newChar);
-    }
 
 
     /**

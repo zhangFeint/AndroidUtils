@@ -1,6 +1,7 @@
 package com.library.utils;
 
 
+import com.library.utils.utils.StringUtil;
 import com.library.utils.utils.TimeUtils;
 
 /**
@@ -17,8 +18,12 @@ public class TextDemo {
 //        String longtime = timeUtils.getTimestamp("2018-12-9 06:10:12", TimeUtils.TIME_FORMAT_2);
 //        System.out.println(longtime);
 //        System.out.println(timeUtils.getTimeStateNew(longtime, TimeUtils.TIME_FORMAT_10));
-       TimeUtils.TimeBean timeBean =  TimeUtils.getInstance().getStringData();
-        System.out.println(timeBean.getDay());
+//       TimeUtils.TimeBean timeBean =  TimeUtils.getInstance().getStringData();
+//        System.out.println(timeBean.getDay());
+        System.out.println(StringUtil.getInstance().setReplace(3, 7, "13674928326", "****"));
+        System.out.println(StringUtil.getInstance().getRandomString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10));
+
+        System.out.println(StringUtil.getInstance().getGUID());
     }
 
 }
