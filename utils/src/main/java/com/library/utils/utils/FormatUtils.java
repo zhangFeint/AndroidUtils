@@ -134,7 +134,7 @@ public class FormatUtils {
      *
      * @param editText
      */
-    public static void setPhoneFormat(final EditText editText) {
+    public  void setPhoneFormat(final EditText editText) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -184,7 +184,7 @@ public class FormatUtils {
      *
      * @param editText
      */
-    public static void setBankCardFormat(final EditText editText) {
+    public  void setBankCardFormat(final EditText editText) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
