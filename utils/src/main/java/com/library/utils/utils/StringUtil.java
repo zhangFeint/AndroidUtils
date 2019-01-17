@@ -361,6 +361,7 @@ public class StringUtil {
         }
         return sb.toString();
     }
+
     /**
      * 转 Unicode
      *
@@ -382,6 +383,7 @@ public class StringUtil {
 
         return sb.toString();
     }
+
     /**
      * 更改编码
      *
@@ -416,8 +418,6 @@ public class StringUtil {
     }
 
 
-
-
     /**
      * 获取[0,n)之间的一个随机整数
      *
@@ -436,9 +436,10 @@ public class StringUtil {
      * @param n
      * @return
      */
-    public static int getRandomBetweenNumbers(int m,int n){
-        return (int)(m + Math.random() * (n - m + 1));
+    public int getRandomBetweenNumbers(int m, int n) {
+        return (int) (m + Math.random() * (n - m + 1));
     }
+
     /**
      * 返回一个&位随机数
      *
@@ -458,12 +459,13 @@ public class StringUtil {
 
     /**
      * 获取指定位数的随机字符串(包含小写字母、大写字母、数字,0<length)
-     * @param KeyString  = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 随机字符串的随机字符库
+     *
+     * @param KeyString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 随机字符串的随机字符库
      * @param length
      * @return
      */
     //
-    public static String getRandomString(String KeyString, int length) {
+    public String getRandomString(String KeyString, int length) {
         StringBuffer sb = new StringBuffer();
         int len = KeyString.length();
         for (int i = 0; i < length; i++) {
@@ -594,7 +596,7 @@ public class StringUtil {
      * @param newChar 替换的字符
      * @return
      */
-    public  String setReplace(int start, int end, String oldChar, String newChar) {
+    public String setReplace(int start, int end, String oldChar, String newChar) {
         return new StringBuilder(oldChar).replace(start, end, newChar).toString();
     }
 
@@ -606,9 +608,10 @@ public class StringUtil {
      * @param newChar  新
      * @return
      */
-    public  String setReplace(String sentence, String oldChar, String newChar) {
+    public String setReplace(String sentence, String oldChar, String newChar) {
         return sentence.replace(oldChar, newChar);
     }
+
     /**
      * 去掉
      *
@@ -620,8 +623,9 @@ public class StringUtil {
     }
 
     /**
-     *  去掉 某个字段
-     * @param src  1000%
+     * 去掉 某个字段
+     *
+     * @param src 1000%
      * @param pre "%"
      * @return
      */
@@ -750,7 +754,7 @@ public class StringUtil {
      * @param paramName eg：province
      * @return 参数名对应的参数值 eg：guangdong
      */
-    public  String findParamValue(String url, String paramName) {
+    public String findParamValue(String url, String paramName) {
         Pattern pattern = Pattern.compile("(^|&|\\?)" + paramName + "=([^&]*)(&|$)");
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {

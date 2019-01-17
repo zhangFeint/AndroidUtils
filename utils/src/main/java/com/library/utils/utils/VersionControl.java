@@ -33,7 +33,6 @@ public class VersionControl {
         this.context = context;
     }
 
-
     /**
      * 版本升级，带拒绝后不会弹出功能的对话框
      *
