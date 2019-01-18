@@ -29,6 +29,8 @@ public class FormatUtils {
      * 银行卡
      */
     public static final String REGEX_BANK_CARD = "/^([1-9]{1})(\\d{14}|\\d{18})$/";
+
+
     /**
      * email格式
      */
@@ -76,15 +78,13 @@ public class FormatUtils {
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%常用的数字格式%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
-
     /**
      * 金钱格式化
      *
      * @param str
      * @return
      */
-    public  String setMoneyFormat(String str) {
+    public String setMoneyFormat(String str) {
         return setMoneyFormat(Double.parseDouble(str));
     }
 
@@ -94,14 +94,14 @@ public class FormatUtils {
      * @param doubles
      * @return
      */
-    public  String setMoneyFormat(Double doubles) {
+    public String setMoneyFormat(Double doubles) {
         return new DecimalFormat("0.00").format(doubles);
     }
 
     /**
      * 金钱格式化
      */
-    public  String setMoneyFormat(float money) {
+    public String setMoneyFormat(float money) {
         String sMoney = new DecimalFormat("##0.00").format(money);
         return sMoney;
     }
@@ -123,18 +123,39 @@ public class FormatUtils {
      * @param str   字符串
      * @return
      */
-    private boolean match(String regex, String str) {
+    public boolean match(String regex, String str) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
         return matcher.matches();
     }
 
     /**
+     * 银行卡号 用空格断开
+     *
+     * @param idCard "1234567890123454"
+     * @return 1234 5678 9012 3454
+     */
+    public String getRegexBankCard(String idCard) {
+        return idCard.replaceAll("\\d{4}(?!$)", "$0 ");
+    }
+
+    /**
+     * 手机号 用空格断开
+     *
+     * @param phone "13674928326"
+     * @return 136 7492 8326
+     */
+    public String getRegexPhone(String phone) {
+        return phone.replaceAll("(1\\w{2})(\\w{4})(\\w{4})", "$1 $2 $3");
+    }
+
+
+    /**
      * 手机号 用空格断开
      *
      * @param editText
      */
-    public  void setPhoneFormat(final EditText editText) {
+    public void setPhoneFormat(final EditText editText) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -184,7 +205,7 @@ public class FormatUtils {
      *
      * @param editText
      */
-    public  void setBankCardFormat(final EditText editText) {
+    public void setBankCardFormat(final EditText editText) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

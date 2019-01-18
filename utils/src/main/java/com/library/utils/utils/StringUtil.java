@@ -461,8 +461,8 @@ public class StringUtil {
      * 获取指定位数的随机字符串(包含小写字母、大写字母、数字,0<length)
      *
      * @param KeyString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 随机字符串的随机字符库
-     * @param length
-     * @return
+     * @param length  10
+     * @return  TH10RMmk5K
      */
     //
     public String getRandomString(String KeyString, int length) {
@@ -475,9 +475,9 @@ public class StringUtil {
     }
 
     /**
-     * 通用唯一标识符
+     * 通用唯一标识符(每一次都不同)
      *
-     * @return
+     * @return  E90B150AC6E14C948F1F7D2B7D9E28B3
      */
     @SuppressLint("DefaultLocale")
     public String getGUID() {
@@ -590,11 +590,11 @@ public class StringUtil {
     /**
      * 替换的字符串
      *
-     * @param start   开始的位置
-     * @param end     结束的位置
-     * @param oldChar 原字符串
-     * @param newChar 替换的字符
-     * @return
+     * @param start   开始的位置  3
+     * @param end     结束的位置  7
+     * @param oldChar 原字符串   "13674928326"
+     * @param newChar 替换的字符  "****"
+     * @return 136****8326
      */
     public String setReplace(int start, int end, String oldChar, String newChar) {
         return new StringBuilder(oldChar).replace(start, end, newChar).toString();

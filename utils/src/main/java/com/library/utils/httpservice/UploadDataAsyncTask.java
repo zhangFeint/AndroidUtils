@@ -93,6 +93,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
      * @author redkid
      */
     public interface NetWorkInterface {
+
         /**
          * 校验UI数据
          *

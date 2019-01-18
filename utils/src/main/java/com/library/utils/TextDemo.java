@@ -1,6 +1,7 @@
 package com.library.utils;
 
 
+import com.library.utils.utils.FormatUtils;
 import com.library.utils.utils.StringUtil;
 import com.library.utils.utils.TimeUtils;
 
@@ -24,6 +25,8 @@ public class TextDemo {
         System.out.println(StringUtil.getInstance().getRandomString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10));
 
         System.out.println(StringUtil.getInstance().getGUID());
+        System.out.println(FormatUtils.getInstance().getRegexBankCard( "1234567890123454"));
+        System.out.println(FormatUtils.getInstance().getRegexPhone( "13674928326"));
     }
 
 }

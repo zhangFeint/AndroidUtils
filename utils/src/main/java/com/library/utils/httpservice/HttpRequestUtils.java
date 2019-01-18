@@ -47,6 +47,7 @@ public class HttpRequestUtils {
     public static String error = "{\"error\":\"fail\"}";
     //文件下载保存的目录
     public static final String FILE_SAVE_CATALOGUE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Downloads";//文件存储路径  /storage/emulated/0
+    public String savePath = null; // 储存下载文件的目录
 
     /**
      * 错误信息
@@ -73,13 +74,13 @@ public class HttpRequestUtils {
                 result = HttpRequestUtils.doGet(url, headers);
                 break;
             case REQUEST_POST:
-                result = HttpRequestUtils.doPost(url, headers, requestBody == null? new FormBody.Builder().build():requestBody);
+                result = HttpRequestUtils.doPost(url, headers, requestBody == null ? new FormBody.Builder().build() : requestBody);
                 break;
             case REQUEST_PUT:
-                result = HttpRequestUtils.doPut(url, headers, requestBody == null? new FormBody.Builder().build():requestBody);
+                result = HttpRequestUtils.doPut(url, headers, requestBody == null ? new FormBody.Builder().build() : requestBody);
                 break;
             case REQUEST_DELETE:
-                result = HttpRequestUtils.doDelete(url, headers, requestBody == null? new FormBody.Builder().build():requestBody);
+                result = HttpRequestUtils.doDelete(url, headers, requestBody == null ? new FormBody.Builder().build() : requestBody);
                 break;
         }
         return result;
@@ -244,7 +245,7 @@ public class HttpRequestUtils {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) { // 下载失败
-                listener.onDownloadFailed(call,e);
+                listener.onDownloadFailed(call, e);
             }
 
             @Override
@@ -253,12 +254,7 @@ public class HttpRequestUtils {
                 byte[] buf = new byte[2048];
                 int len = 0;
                 FileOutputStream fos = null;
-                String savePath = null; // 储存下载文件的目录
-                if (saveDir == null) {
-                    savePath = isExistDir(FILE_SAVE_CATALOGUE);
-                } else {
-                    savePath = isExistDir(saveDir);
-                }
+                savePath = isExistDir(saveDir == null ? FILE_SAVE_CATALOGUE : saveDir);
                 try {
                     is = response.body().byteStream();
                     long total = response.body().contentLength();
@@ -276,10 +272,10 @@ public class HttpRequestUtils {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                        if (is != null)
-                            is.close();
-                        if (fos != null)
-                            fos.close();
+                    if (is != null)
+                        is.close();
+                    if (fos != null)
+                        fos.close();
                 }
             }
         });
