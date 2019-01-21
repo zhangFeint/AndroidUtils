@@ -67,7 +67,7 @@ public class OkHttp3NetWork {
      */
     public static void submitData(Context context, int requetWay, String loadMsg, DialogControl control, int overtime, boolean isShowDialog, UploadDataAsyncTask.NetWorkInterface netWork) {
         initNetworkAvailable(context);
-        UploadDataAsyncTask up = new UploadDataAsyncTask(context, loadMsg, netWork, control, overtime, isShowDialog, requetWay);
+        UploadDataAsyncTask up = new UploadDataAsyncTask( loadMsg, netWork, control, overtime, isShowDialog, requetWay);
         up.execute();
     }
 

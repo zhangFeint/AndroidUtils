@@ -154,5 +154,34 @@ public class SubmitData {
         return body;
     }
 
+    /**
+     * 参数（可选）
+     *
+     * @param key
+     * @param value
+     * @param is
+     * @return
+     */
+    public  String getChoosable(String key, String value, boolean is) {
+        if (value.isEmpty()) {
+            return "";
+        }
+        return is ? "&" + key + "=" + value : key + "=" + value;
 
+    }
+
+    /**
+     * 参数（可选）Map
+     *
+     * @param map
+     * @param key
+     * @param value
+     * @return
+     */
+    public  Map getMapChoosable(Map map, String key, String value) {
+        if (!value.isEmpty()) {
+            map.put(key, value);
+        }
+        return map;
+    }
 }

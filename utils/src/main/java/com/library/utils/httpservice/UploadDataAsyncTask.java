@@ -11,7 +11,6 @@ import android.os.AsyncTask;
  */
 public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     private static final String TAG = UploadDataAsyncTask.class.getSimpleName();
-    private Context context;
     private NetWorkInterface netWork;//数据的提交接口
     private DialogControl control;
 
@@ -23,26 +22,24 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     /**
      * 构造函数，向服务器提交多次数据
      */
-    public UploadDataAsyncTask(Context context, String loadMsg, NetWorkInterface netWork, DialogControl control, int overtime, int requetWay) {
-        this(context, loadMsg, netWork, control, overtime, false, requetWay);
+    public UploadDataAsyncTask( String loadMsg, NetWorkInterface netWork, DialogControl control, int overtime, int requetWay) {
+        this( loadMsg, netWork, control, overtime, false, requetWay);
     }
 
     /**
      * 向服务器提交多次数据
      *
-     * @param context      上下文
      * @param loadMsg
      * @param netWork
      * @param control
      * @param overtime
      * @param isShowDialog
      */
-    public UploadDataAsyncTask(Context context, String loadMsg, NetWorkInterface netWork, DialogControl control, int overtime, boolean isShowDialog, int requetWay) {
+    public UploadDataAsyncTask( String loadMsg, NetWorkInterface netWork, DialogControl control, int overtime, boolean isShowDialog, int requetWay) {
         if (!netWork.validate()) { // 如果校验没有通过，不继续执行
             return;
         }
         this.netWork = netWork;
-        this.context = context;
         this.overtime = overtime;//超时时间
         this.isShowDialog = isShowDialog;//是否创建 DialogControl
         this.control = control;
