@@ -19,7 +19,6 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     int requetWay = 1;
 
 
-
     /**
      * 向服务器提交多次数据
      *
@@ -27,7 +26,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
      * @param control
      * @param overtime
      */
-    public UploadDataAsyncTask(NetWorkInterface netWork, DialogControl control, int overtime,  int requetWay) {
+    public UploadDataAsyncTask(NetWorkInterface netWork, DialogControl control, int overtime, int requetWay) {
         if (!netWork.validate()) { // 如果校验没有通过，不继续执行
             return;
         }
@@ -35,7 +34,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
         this.overtime = overtime;//超时时间
         this.control = control;
         this.requetWay = requetWay;
-        if ( null != control) {
+        if (null != control) {
             this.control.show(this);// 加载中文字
         }
     }
@@ -59,7 +58,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
         SubmitData data = netWork.getSubmitData();//获取提交数据信息
         HttpRequestUtils.getInstance().setOvertime(overtime);
         String result = HttpRequestUtils.getInstance().getRequestRresults(data.getUrl(), data.getHeaders(), data.getBoby(), requetWay);
-        if ( null != control) {//捕获异常时关闭dialog
+        if (null != control) {//捕获异常时关闭dialog
             control.done();
         }
         return result;
@@ -67,11 +66,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
 
     @Override
     protected void onPostExecute(String result) { //执行回调接口方法
-        try {
-            netWork.result(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        netWork.result(result);
         super.onPostExecute(result);
     }
 
@@ -100,7 +95,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
          *
          * @param result 返回数据结果
          */
-        void result(final String result) throws Exception;
+        void result(final String result);
 
     }
 }

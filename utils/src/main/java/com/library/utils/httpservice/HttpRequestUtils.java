@@ -242,12 +242,12 @@ public class HttpRequestUtils {
             if (response.isSuccessful()) {
                 return response.body().string();
             }
+            return error;
         } catch (IOException e) {
             Log.e("HttpRequestUtils", e.getMessage());
             e.printStackTrace();
             return error;
         }
-        return error;
     }
 
     /**
