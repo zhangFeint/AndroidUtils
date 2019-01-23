@@ -20,7 +20,7 @@ import static android.support.v4.content.FileProvider.getUriForFile;
  * 权限管理辅助类
  */
 public class PermissionsUtils {
-
+    private static PermissionsUtils permissionsUtils;
     /**
      * 请求动态加载权限
      * <!--在SDCard中创建与删除文件权限  -->
@@ -42,57 +42,93 @@ public class PermissionsUtils {
     static List<String> PermnList;//授权失败的集合
 
     /**
-     * 动态申请权限(在onCreate里使用，配合回调)
-     *
-     * @param activity             上下文
-     * @param permissions          权限数组
-     * @param requestCode          权限请求码
-     * @param onPermissionListener 接口返回
+     * 单例模式
      */
-    public static void requestPermission(Activity activity, String[] permissions, int requestCode, OnPermissionListener onPermissionListener) {
+    public static PermissionsUtils getInstance() {
+        if (permissionsUtils == null) {
+            permissionsUtils = new PermissionsUtils();
+        }
+
+        return permissionsUtils;
+    }
+
+    /**
+     * @param activity
+     * @param permissions
+     * @return true  有  false没有
+     */
+    public boolean isPermissions(Activity activity, String[] permissions) {
         mPermissionList = new ArrayList<>();
         PermnList = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
-                    mPermissionList.add(permission); //获取没有授权的权限
-                }
-            }
-            if (!mPermissionList.isEmpty()) {
-                ActivityCompat.requestPermissions(activity, mPermissionList.toArray(new String[mPermissionList.size()]), requestCode); //请求授权
-            }
-            for (String perm : mPermissionList) { //验证是否许可权限
-                if (ActivityCompat.checkSelfPermission(activity, perm) != PackageManager.PERMISSION_GRANTED) {
-                    PermnList.add(perm);
-                }
+        for (String permission : permissions) {
+            if (ActivityCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permission); //获取没有授权的权限
             }
         }
-        if (PermnList.isEmpty()) {//未授予的权限为空，表示都授予了
-            onPermissionListener.onSucceed();//授权成功
+        if (!mPermissionList.isEmpty()) {
+            return false;
         } else {
-            onPermissionListener.onFailure();//授权失败
+            return true;
         }
     }
 
+    /**
+     * @param activity
+     * @param permissions
+     * @param requestCode
+     */
+    public void accreditPermissions(Activity activity, String[] permissions, int requestCode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isPermissions(activity, permissions)) {
+                if (listener != null) {
+                    listener.onAccredit();
+                }
+            } else {
+                ActivityCompat.requestPermissions(activity, mPermissionList.toArray(new String[mPermissionList.size()]), requestCode); //请求授权
+            }
+
+        }
+    }
 
     /**
      * 动态申请回调（在onRequestPermissionsResult里使用，配合动态申请）
      *
      * @param grantResults
-     * @param onPermissionListener 接口返回
      */
-    public static void isPermissionsResult(int[] grantResults, OnPermissionListener onPermissionListener) {
+    public void isPermissionsResult(int[] grantResults) {
         if (grantResults.length > 0) {
             for (int grantResult : grantResults) {
                 if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    onPermissionListener.onSucceed();//某一个权限被拒绝了
+                    if (listener != null) {
+                        listener.onNotAuthorized();
+                    }
                     return;
                 }
             }
-            onPermissionListener.onSucceed();
+            if (listener != null) {
+                listener.onAccredit();
+            }
         }
     }
 
+    /**
+     * 跳转到权限设置界面
+     * @param activity
+     * @param requestCode
+     */
+    public void toAppSetting(Activity activity, int requestCode) {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", activity.getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName", activity.getPackageName());
+        }
+        activity.startActivityForResult(localIntent, requestCode);
+    }
 
     /**
      * 适配了android7 的uri文件暴露权限
@@ -101,7 +137,7 @@ public class PermissionsUtils {
      * @param picturefile
      * @return
      */
-    public static Uri getFileUriPermission(Context context, File picturefile) {
+    public Uri getFileUriPermission(Context context, File picturefile) {
         Uri uri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//7.0及以上
             uri = getUriForFile(context, context.getPackageName() + ".fileprovider", picturefile);
@@ -112,13 +148,19 @@ public class PermissionsUtils {
         return uri;//文件对外暴露权限
     }
 
+    private OnPermissionListener listener;
+
+    public void setPermissionListener(OnPermissionListener listener) {
+        this.listener = listener;
+    }
+
     /**
      * 接口
      */
     public interface OnPermissionListener {
-        void onSucceed();
+        void onAccredit();
 
-        void onFailure();
+        void onNotAuthorized();
     }
 
 }

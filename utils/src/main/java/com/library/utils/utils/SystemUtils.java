@@ -88,20 +88,12 @@ public class SystemUtils {
      * @param phone    手机号
      */
     public void openPhone(final Activity activity, final String phone) {
-        PermissionsUtils.requestPermission(activity, PermissionsUtils.PHONE_PERMISSIONS, PermissionsUtils.REQUEST_CODE_PERMISSION, new PermissionsUtils.OnPermissionListener() {
-            @Override
-            public void onSucceed() {
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                activity.startActivity(intent);
-            }
-
-            @Override
-            public void onFailure() {
-                Toast.makeText(activity, "没有权限", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.PHONE_PERMISSIONS)) {
+            Toast.makeText(activity, "没有权限！", Toast.LENGTH_SHORT).show();
+        }
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
     }
 
     /**
@@ -111,48 +103,33 @@ public class SystemUtils {
      * @param uri      tel:13674928321
      */
     public void openPhone(final Activity activity, final Uri uri) {
-        PermissionsUtils.requestPermission(activity, PermissionsUtils.PHONE_PERMISSIONS, PermissionsUtils.REQUEST_CODE_PERMISSION, new PermissionsUtils.OnPermissionListener() {
-            @Override
-            public void onSucceed() {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(uri);
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                activity.startActivity(intent);
-            }
-
-            @Override
-            public void onFailure() {
-                Toast.makeText(activity, "没有权限", Toast.LENGTH_SHORT).show();
-            }
-
-        });
-
+        if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.PHONE_PERMISSIONS)) {
+            Toast.makeText(activity, "没有权限！", Toast.LENGTH_SHORT).show();
+        }
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(uri);
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        activity.startActivity(intent);
     }
 
     /**
      * url打电话
+     *
      * @param activity
-     * @param url <a href="tel:4008119568">
+     * @param url      <a href="tel:4008119568">
      */
     public void openPhoneUrl(final Activity activity, final String url) {
-        PermissionsUtils.requestPermission(activity, PermissionsUtils.PHONE_PERMISSIONS, PermissionsUtils.REQUEST_CODE_PERMISSION, new PermissionsUtils.OnPermissionListener() {
-            @Override
-            public void onSucceed() {
-                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-            }
-
-            @Override
-            public void onFailure() {
-                Toast.makeText(activity, "没有权限", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.PHONE_PERMISSIONS)) {
+            Toast.makeText(activity, "没有权限！", Toast.LENGTH_SHORT).show();
+        }
+        activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
     /**
      * 发送短信
+     *
      * @param activity
      * @param mobile   手机号
      * @param body     内容
@@ -165,11 +142,12 @@ public class SystemUtils {
 
     /**
      * 其二是使用SmsManager： 直接发送短信
-     * @param mobile  手机号
-     * @param body     内容
+     *
+     * @param mobile 手机号
+     * @param body   内容
      * @return
      */
-    public boolean sendSmsManager( String mobile, String body) {
+    public boolean sendSmsManager(String mobile, String body) {
         SmsManager sms = SmsManager.getDefault(); //获取SmsManager
         List<String> texts = sms.divideMessage(body); //如果内容大于70字，则拆分为多条
         for (String text : texts) {  //逐条发送短信
@@ -182,6 +160,7 @@ public class SystemUtils {
 
     /**
      * 打开QQ的app
+     *
      * @param activity
      */
     public void openQQ(Activity activity) {
@@ -196,18 +175,20 @@ public class SystemUtils {
     }
 
     /**
-     *  打开QQ的会话界面
+     * 打开QQ的会话界面
+     *
      * @param activity
-     * @param QQ  501863587
+     * @param QQ       501863587
      */
     public void openQQNumber(Activity activity, String QQ) {
-        openQQ(activity,"mqqwpa://im/chat?chat_type=wpa&uin=" + QQ);
+        openQQ(activity, "mqqwpa://im/chat?chat_type=wpa&uin=" + QQ);
     }
 
     /**
-     *  打开QQ的会话界面
+     * 打开QQ的会话界面
+     *
      * @param activity
-     * @param url  mqqwpa://im/chat?chat_type=wpa&uin=501863587
+     * @param url      mqqwpa://im/chat?chat_type=wpa&uin=501863587
      */
     public void openQQ(Activity activity, String url) {
         try {
@@ -220,6 +201,7 @@ public class SystemUtils {
 
     /**
      * 打开微信
+     *
      * @param activity
      */
     public void openWeixin(Activity activity) {
@@ -236,11 +218,12 @@ public class SystemUtils {
 
     /**
      * 打开手机上的  web浏览器
+     *
      * @param activity
      * @param url
      */
     public void openWeb(Activity activity, String url) {
-        activity.startActivity(new Intent(Intent.ACTION_VIEW,  Uri.parse(url)));
+        activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 //---------------------------------------------------------- 通讯录，联系人列表----------------------------------------------------------------------
 
@@ -257,8 +240,9 @@ public class SystemUtils {
 
     /**
      * 打开联系人列表
+     *
      * @param activity
-     * @param requestCode  请求码
+     * @param requestCode 请求码
      */
     public void openLinkman(Activity activity, int requestCode) {
         Intent it = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts/people"));
@@ -286,7 +270,7 @@ public class SystemUtils {
         if (!apkfile.exists()) {
             return;
         }
-        Uri apkUri = PermissionsUtils.getFileUriPermission(activity, apkfile);
+        Uri apkUri = PermissionsUtils.getInstance().getFileUriPermission(activity, apkfile);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 由于没有在Activity环境下启动Activity,设置下面的标签
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);  //添加这一句表示对目标应用临时授权该Uri所代表的文件
@@ -322,26 +306,19 @@ public class SystemUtils {
     public void openCamera(Activity activity, int requestCode) {
         openCamera(activity, FileUtils.getInstance().getFilePath(activity, 4), "Camera", requestCode);
     }
+
     public void openCamera(final Activity activity, final String savePath, final String subcatalog, final int requestCode) {
-        PermissionsUtils.requestPermission(activity, PermissionsUtils.CAMERA_PERMISSIONS, requestCode, new PermissionsUtils.OnPermissionListener() {
-            @Override
-            public void onSucceed() {
-                file = FileUtils.getInstance().getSaveFile(savePath, subcatalog, FileUtils.getInstance().getPicName("IMG_"));
-                ContentValues contentValues = new ContentValues(1);
-                contentValues.put(MediaStore.Images.Media.DATA, file.getAbsolutePath()); //保存到默认相机目录
-                cameraUri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues); // 其次把文件插入到系统图库
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri); //添加到文件里
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
-                activity.startActivityForResult(intent, requestCode);
-            }
-
-            @Override
-            public void onFailure() {
-                Toast.makeText(activity, "没有权限", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.CAMERA_PERMISSIONS)) {
+            Toast.makeText(activity, "没有权限！", Toast.LENGTH_SHORT).show();
+        }
+        file = FileUtils.getInstance().getSaveFile(savePath, subcatalog, FileUtils.getInstance().getPicName("IMG_"));
+        ContentValues contentValues = new ContentValues(1);
+        contentValues.put(MediaStore.Images.Media.DATA, file.getAbsolutePath()); //保存到默认相机目录
+        cameraUri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues); // 其次把文件插入到系统图库
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri); //添加到文件里
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+        activity.startActivityForResult(intent, requestCode);
     }
 
     public File getCameraFile() {
@@ -351,7 +328,6 @@ public class SystemUtils {
     public Uri getmCameraUri() {
         return cameraUri;
     }
-
 
 
     /**
@@ -393,9 +369,9 @@ public class SystemUtils {
     }
 
 
-        /**
-         * 调用文件
-         */
+    /**
+     * 调用文件
+     */
     public static final String TYPE_NO = "*/*";
     public static final String TYPE_IMG = "image/*";
     public static final String TYPE_AUDIO = "audio/*";
