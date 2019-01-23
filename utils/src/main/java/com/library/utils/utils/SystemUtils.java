@@ -89,7 +89,7 @@ public class SystemUtils {
      */
     public void openPhone(final Activity activity, final String phone) {
         if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.PHONE_PERMISSIONS)) {
-            Toast.makeText(activity, "没有权限！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "没有权限，请在设置中添加！", Toast.LENGTH_SHORT).show();
         }
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -104,7 +104,7 @@ public class SystemUtils {
      */
     public void openPhone(final Activity activity, final Uri uri) {
         if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.PHONE_PERMISSIONS)) {
-            Toast.makeText(activity, "没有权限！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "没有权限，请在设置中添加！", Toast.LENGTH_SHORT).show();
         }
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(uri);
@@ -122,7 +122,7 @@ public class SystemUtils {
      */
     public void openPhoneUrl(final Activity activity, final String url) {
         if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.PHONE_PERMISSIONS)) {
-            Toast.makeText(activity, "没有权限！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "没有权限，请在设置中添加！", Toast.LENGTH_SHORT).show();
         }
         activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
@@ -309,7 +309,7 @@ public class SystemUtils {
 
     public void openCamera(final Activity activity, final String savePath, final String subcatalog, final int requestCode) {
         if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.CAMERA_PERMISSIONS)) {
-            Toast.makeText(activity, "没有权限！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "没有权限，请在设置中添加！", Toast.LENGTH_SHORT).show();
         }
         file = FileUtils.getInstance().getSaveFile(savePath, subcatalog, FileUtils.getInstance().getPicName("IMG_"));
         ContentValues contentValues = new ContentValues(1);
