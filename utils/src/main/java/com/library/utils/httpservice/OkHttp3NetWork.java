@@ -16,23 +16,12 @@ public class OkHttp3NetWork {
     private static final String LOADED_TIP = "资源加载中,请稍后...";
 
     /**
-     * 访问本地xml信息，用来做测试
-     *
-     * @param context
-     * @param localFile 文件 "city.json" assets 包下（与res同级）
-     * @param netWork
-     * @throws Exception
-     */
-    public static void submitNoDialog(Context context, String localFile, UploadDataAsyncTask.NetWorkInterface netWork) throws Exception {
-        initNetworkAvailable(context);
-        netWork.result(HttpRequestUtils.readJson(context, localFile));     //返回数据  跳到本页面的handleOrderList方法里面 146line
-    }
-
-    /**
      * 提交数据,不带提示信息
      */
+    @Deprecated
     public static void submitNoDialog(Context context, int requetWay, UploadDataAsyncTask.NetWorkInterface netWork) {
-        submitData(context, requetWay, LOADED_TIP, null, 25000, false, netWork);
+        initNetworkAvailable(context);
+        submitData(requetWay, null, 25000,  netWork);
     }
 
     /**
@@ -45,29 +34,30 @@ public class OkHttp3NetWork {
      */
     public static void submitDialog(Context context, String localFile, UploadDataAsyncTask.NetWorkInterface netWork) throws Exception {
         initNetworkAvailable(context);
-        netWork.result(HttpRequestUtils.readJson(context, localFile));     //返回数据  跳到本页面的handleOrderList方法里面 146line
+        netWork.result(HttpRequestUtils.getInstance().readJson(context, localFile));     //返回数据  跳到本页面的handleOrderList方法里面 146line
     }
 
     /**
      * 提交数据,不带提示信息
      */
     public static void submitDialog(Context context, int requetWay, UploadDataAsyncTask.NetWorkInterface netWork) {
-        submitData(context, requetWay, LOADED_TIP, null, 25000, false, netWork);
+        initNetworkAvailable(context);
+        submitData(requetWay, null, 25000, netWork);
     }
 
     /**
      * 提交数据,带提示信息
      */
     public static void submitDialog(Context context, int requetWay, DialogControl control, UploadDataAsyncTask.NetWorkInterface netWork) {
-        submitData(context, requetWay, LOADED_TIP, control, 25000, false, netWork);
+        initNetworkAvailable(context);
+        submitData(requetWay, control, 25000, netWork);
     }
 
     /**
-     * 提交数据
+     * 提交数据,OKhttp3 请求
      */
-    public static void submitData(Context context, int requetWay, String loadMsg, DialogControl control, int overtime, boolean isShowDialog, UploadDataAsyncTask.NetWorkInterface netWork) {
-        initNetworkAvailable(context);
-        UploadDataAsyncTask up = new UploadDataAsyncTask( loadMsg, netWork, control, overtime, isShowDialog, requetWay);
+    public static void submitData(int requetWay, DialogControl control, int overtime, UploadDataAsyncTask.NetWorkInterface netWork) {
+        UploadDataAsyncTask up = new UploadDataAsyncTask(netWork, control, overtime, requetWay);
         up.execute();
     }
 
@@ -112,6 +102,7 @@ public class OkHttp3NetWork {
 
     /**
      * 网络监听
+     *
      * @param onNetworkListener
      */
     public static void setOnNetworkListener(OnNetworkListener onNetworkListener) {

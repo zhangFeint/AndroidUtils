@@ -1,6 +1,5 @@
 package com.library.utils.httpservice;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 
@@ -15,39 +14,32 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     private DialogControl control;
 
     private int overtime;//超时时间
-    private boolean isShowDialog = false;//提交数据时是否显示Dialog
+
 
     int requetWay = 1;
 
-    /**
-     * 构造函数，向服务器提交多次数据
-     */
-    public UploadDataAsyncTask( String loadMsg, NetWorkInterface netWork, DialogControl control, int overtime, int requetWay) {
-        this( loadMsg, netWork, control, overtime, false, requetWay);
-    }
+
 
     /**
      * 向服务器提交多次数据
      *
-     * @param loadMsg
      * @param netWork
      * @param control
      * @param overtime
-     * @param isShowDialog
      */
-    public UploadDataAsyncTask( String loadMsg, NetWorkInterface netWork, DialogControl control, int overtime, boolean isShowDialog, int requetWay) {
+    public UploadDataAsyncTask(NetWorkInterface netWork, DialogControl control, int overtime,  int requetWay) {
         if (!netWork.validate()) { // 如果校验没有通过，不继续执行
             return;
         }
         this.netWork = netWork;
         this.overtime = overtime;//超时时间
-        this.isShowDialog = isShowDialog;//是否创建 DialogControl
         this.control = control;
         this.requetWay = requetWay;
-        if (!isShowDialog && null != control) {
-            this.control.show(this, loadMsg);// 加载中文字
+        if ( null != control) {
+            this.control.show(this);// 加载中文字
         }
     }
+
 
     /**
      * 加上触发前的判断
@@ -65,9 +57,9 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     @Override
     protected String doInBackground(byte[]... params) {
         SubmitData data = netWork.getSubmitData();//获取提交数据信息
-        HttpRequestUtils.setOvertime(overtime);
-        String result = HttpRequestUtils.getRequestRresults(data.getUrl(), data.getHeaders(), data.getBoby(), requetWay);
-        if (!isShowDialog && null != control) {//捕获异常时关闭dialog
+        HttpRequestUtils.getInstance().setOvertime(overtime);
+        String result = HttpRequestUtils.getInstance().getRequestRresults(data.getUrl(), data.getHeaders(), data.getBoby(), requetWay);
+        if ( null != control) {//捕获异常时关闭dialog
             control.done();
         }
         return result;

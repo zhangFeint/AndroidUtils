@@ -40,10 +40,10 @@ public class DialogControl {
      * 弹出对话框
      * 
      */
-    public void show(final AsyncTask<?, ?, ?> task,String tible) {
+    public void show(final AsyncTask<?, ?, ?> task) {
         tasks.add(task);
         if (curReqNum == 1 && null != dialog) {
-            dialog.setTitle(tible);
+//            dialog.setTitle(tible);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setCancelable(true);
             dialog.show();

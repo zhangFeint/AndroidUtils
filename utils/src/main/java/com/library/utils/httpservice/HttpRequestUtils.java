@@ -6,6 +6,8 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.library.utils.utils.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,6 +36,8 @@ import okhttp3.Response;
  * Created with IntelliJ IDEA
  */
 public class HttpRequestUtils {
+    private static HttpRequestUtils httpRequestUtils;
+
     private static int overtime = 600;//超时时间
     //请求方式
     public static final int REQUEST_GET = 1;
@@ -43,18 +47,29 @@ public class HttpRequestUtils {
     //编码集
     public static final String CHARSET_NAME_UTF = "UTF-8";
     public static final String CHARSET_NAME_GPK = "gbk";
-    //错误返回
-    public static String error = "{\"error\":\"fail\"}";
+    //错误返回 0053 找不到网络路径
+    public static String error = "{\n" +
+            "    \"code\": 0053,\n" +
+            "    \"error\": \"fail\"\n" +
+            "}";
     //文件下载保存的目录
     public static final String FILE_SAVE_CATALOGUE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Downloads";//文件存储路径  /storage/emulated/0
     public String savePath = null; // 储存下载文件的目录
+
+
+    /**
+     * 单例模式
+     */
+    public static HttpRequestUtils getInstance() {
+        return httpRequestUtils == null ? new HttpRequestUtils() : httpRequestUtils;
+    }
 
     /**
      * 错误信息
      *
      * @param error
      */
-    public static void setError(String error) {
+    public void setError(String error) {
         HttpRequestUtils.error = error;
     }
 
@@ -63,24 +78,27 @@ public class HttpRequestUtils {
      *
      * @param overtime
      */
-    public static void setOvertime(int overtime) {
+    public void setOvertime(int overtime) {
         HttpRequestUtils.overtime = overtime;
     }
 
-    public static String getRequestRresults(String url, HashMap<String, String> headers, RequestBody requestBody, int mode) {
+    public String getRequestRresults(String url, HashMap<String, String> headers, RequestBody requestBody, int mode) {
         String result = null;
+        if (requestBody == null) {
+            requestBody = new FormBody.Builder().build();
+        }
         switch (mode) {
             case REQUEST_GET:
-                result = HttpRequestUtils.doGet(url, headers);
+                result = doGet(url, headers);
                 break;
             case REQUEST_POST:
-                result = HttpRequestUtils.doPost(url, headers, requestBody == null ? new FormBody.Builder().build() : requestBody);
+                result = doPost(url, headers, requestBody);
                 break;
             case REQUEST_PUT:
-                result = HttpRequestUtils.doPut(url, headers, requestBody == null ? new FormBody.Builder().build() : requestBody);
+                result = doPut(url, headers, requestBody);
                 break;
             case REQUEST_DELETE:
-                result = HttpRequestUtils.doDelete(url, headers, requestBody == null ? new FormBody.Builder().build() : requestBody);
+                result = doDelete(url, headers, requestBody);
                 break;
         }
         return result;
@@ -93,7 +111,7 @@ public class HttpRequestUtils {
      * @param localFile
      * @return json
      */
-    public static String readJson(Context context, String localFile) throws IOException {
+    public String readJson(Context context, String localFile) throws IOException {
         InputStream is = context.getAssets().open(localFile);
         BufferedReader reader = null; //从给定位置获取文件流
         StringBuffer data = new StringBuffer();   //返回值,使用StringBuffer
@@ -122,7 +140,7 @@ public class HttpRequestUtils {
      */
 
 
-    public static String readJson(Context context, String localFile, String charsetName) throws IOException {
+    public String readJson(Context context, String localFile, String charsetName) throws IOException {
         StringBuffer sb = new StringBuffer();
         InputStream is = context.getClass().getClassLoader().getResourceAsStream(localFile);
         int len = -1;
@@ -141,7 +159,7 @@ public class HttpRequestUtils {
      * @param headers
      * @return
      */
-    public static String doGet(String url, HashMap<String, String> headers) {
+    public String doGet(String url, HashMap<String, String> headers) {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -158,7 +176,7 @@ public class HttpRequestUtils {
      * @param builder
      * @return
      */
-    public static String doPut(String url, HashMap<String, String> headers, RequestBody builder) {
+    public String doPut(String url, HashMap<String, String> headers, RequestBody builder) {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -176,7 +194,7 @@ public class HttpRequestUtils {
      * @param builder
      * @return
      */
-    public static String doPost(String url, HashMap<String, String> headers, RequestBody builder) {
+    public String doPost(String url, HashMap<String, String> headers, RequestBody builder) {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -185,6 +203,7 @@ public class HttpRequestUtils {
                 .build();
         return execute(request);
     }
+
     /**
      * delete 方式请求
      *
@@ -193,7 +212,7 @@ public class HttpRequestUtils {
      * @param builder
      * @return
      */
-    public static String doDelete(String url, HashMap<String, String> headers, RequestBody builder) {
+    public String doDelete(String url, HashMap<String, String> headers, RequestBody builder) {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -209,7 +228,7 @@ public class HttpRequestUtils {
      * @param request 请求数据
      * @return
      */
-    private static String execute(Request request) {
+    private String execute(Request request) {
         try {
             OkHttpClient okHttpClient = new OkHttpClient();
             Response response = okHttpClient
@@ -231,8 +250,18 @@ public class HttpRequestUtils {
         return error;
     }
 
+    /**
+     * 执行
+     *
+     * @param request
+     * @param responseCallback
+     */
+    private void execute(Request request, Callback responseCallback) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.newCall(request).enqueue(responseCallback);
+    }
 
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&--下载文件--&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+/****************************************************下载文件************************************************/
 
     /**
      * @param url      下载连接

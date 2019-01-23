@@ -1,6 +1,12 @@
 package com.library.utils;
 
 
+import android.widget.Toast;
+
+import com.library.utils.httpservice.HttpRequestUtils;
+import com.library.utils.httpservice.OkHttp3NetWork;
+import com.library.utils.httpservice.SubmitData;
+import com.library.utils.httpservice.UploadDataAsyncTask;
 import com.library.utils.utils.FormatUtils;
 import com.library.utils.utils.StringUtil;
 import com.library.utils.utils.TimeUtils;
@@ -27,6 +33,12 @@ public class TextDemo {
         System.out.println(StringUtil.getInstance().getGUID());
         System.out.println(FormatUtils.getInstance().getRegexBankCard( "1234567890123454"));
         System.out.println(FormatUtils.getInstance().getRegexPhone( "13674928326"));
+        OkHttp3NetWork.setOnNetworkListener(new OkHttp3NetWork.OnNetworkListener() {
+            @Override
+            public void Disnet() {
+                System.out.println("网络错误");
+            }
+        });
     }
 
 }

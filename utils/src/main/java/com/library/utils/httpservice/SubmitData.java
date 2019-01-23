@@ -167,7 +167,6 @@ public class SubmitData {
             return "";
         }
         return is ? "&" + key + "=" + value : key + "=" + value;
-
     }
 
     /**
