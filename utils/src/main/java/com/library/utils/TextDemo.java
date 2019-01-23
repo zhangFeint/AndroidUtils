@@ -33,12 +33,7 @@ public class TextDemo {
         System.out.println(StringUtil.getInstance().getGUID());
         System.out.println(FormatUtils.getInstance().getRegexBankCard( "1234567890123454"));
         System.out.println(FormatUtils.getInstance().getRegexPhone( "13674928326"));
-        OkHttp3NetWork.setOnNetworkListener(new OkHttp3NetWork.OnNetworkListener() {
-            @Override
-            public void Disnet() {
-                System.out.println("网络错误");
-            }
-        });
+
     }
 
 }
