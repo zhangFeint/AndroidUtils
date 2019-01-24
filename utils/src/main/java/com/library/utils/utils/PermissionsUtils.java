@@ -48,7 +48,6 @@ public class PermissionsUtils {
         if (permissionsUtils == null) {
             permissionsUtils = new PermissionsUtils();
         }
-
         return permissionsUtils;
     }
 
