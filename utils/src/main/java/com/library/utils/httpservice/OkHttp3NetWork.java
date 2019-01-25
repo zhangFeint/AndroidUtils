@@ -3,7 +3,6 @@ package com.library.utils.httpservice;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.widget.Toast;
 
 
 /**
@@ -48,7 +47,7 @@ public class OkHttp3NetWork {
     /**
      * 提交数据,带提示信息
      */
-    public static void submitDialog(Context context, int requetWay, DialogControl control, UploadDataAsyncTask.NetWorkInterface netWork) {
+    public static void submitDialog(Context context, int requetWay, OnLoadListener control, UploadDataAsyncTask.NetWorkInterface netWork) {
         initNetworkAvailable(context);
         submitData(requetWay, control, 25000, netWork);
     }
@@ -56,7 +55,7 @@ public class OkHttp3NetWork {
     /**
      * 提交数据,OKhttp3 请求
      */
-    public static void submitData(int requetWay, DialogControl control, int overtime, UploadDataAsyncTask.NetWorkInterface netWork) {
+    public static void submitData(int requetWay, OnLoadListener control, int overtime, UploadDataAsyncTask.NetWorkInterface netWork) {
         UploadDataAsyncTask up = new UploadDataAsyncTask(netWork, control, overtime, requetWay);
         up.execute();
     }

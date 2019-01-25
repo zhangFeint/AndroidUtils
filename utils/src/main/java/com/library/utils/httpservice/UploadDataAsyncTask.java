@@ -11,7 +11,7 @@ import android.os.AsyncTask;
 public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     private static final String TAG = UploadDataAsyncTask.class.getSimpleName();
     private NetWorkInterface netWork;//数据的提交接口
-    private DialogControl control;
+    private OnLoadListener listener;
 
     private int overtime;//超时时间
 
@@ -23,19 +23,19 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
      * 向服务器提交多次数据
      *
      * @param netWork
-     * @param control
+     * @param listener
      * @param overtime
      */
-    public UploadDataAsyncTask(NetWorkInterface netWork, DialogControl control, int overtime, int requetWay) {
+    public UploadDataAsyncTask(NetWorkInterface netWork, OnLoadListener listener, int overtime, int requetWay) {
         if (!netWork.validate()) { // 如果校验没有通过，不继续执行
             return;
         }
         this.netWork = netWork;
         this.overtime = overtime;//超时时间
-        this.control = control;
+        this.listener = listener;
         this.requetWay = requetWay;
-        if (null != control) {
-            this.control.show(this);// 加载中文字
+        if (null != listener) {
+           listener.onShow();
         }
     }
 
@@ -58,8 +58,8 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
         SubmitData data = netWork.getSubmitData();//获取提交数据信息
         HttpRequestUtils.getInstance().setOvertime(overtime);
         String result = HttpRequestUtils.getInstance().getRequestRresults(data.getUrl(), data.getHeaders(), data.getBoby(), requetWay);
-        if (null != control) {//捕获异常时关闭dialog
-            control.done();
+        if (null != listener) {//捕获异常时关闭dialog
+            listener.onConceal();
         }
         return result;
     }
