@@ -75,7 +75,6 @@ public class OkHttp3NetWork {
 
     /**
      * 检测当的网络（WLAN、3G/2G）状态 true 表示网络可用
-     *
      * @param context
      */
     public static void initNetworkAvailable(Context context) {
