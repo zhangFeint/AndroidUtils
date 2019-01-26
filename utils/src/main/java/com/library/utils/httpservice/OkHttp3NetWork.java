@@ -3,6 +3,7 @@ package com.library.utils.httpservice;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 
 
 /**
@@ -79,6 +80,10 @@ public class OkHttp3NetWork {
      */
     public static void initNetworkAvailable(Context context) {
         if (!isNetworkAvailable(context)) {   // 如果手机中没有可用的连接，给出提示信息
+         if(   listener==null){
+             Toast.makeText(context, NO_NETWORK_TEXT, Toast.LENGTH_SHORT).show();
+             return;
+         }
             listener.Disnet();
             return;
         }
