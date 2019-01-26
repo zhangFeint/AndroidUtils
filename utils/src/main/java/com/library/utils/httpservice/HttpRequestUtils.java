@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -339,6 +340,34 @@ public class HttpRequestUtils {
         //················下载失败·················
         void onDownloadFailed(Call call, IOException e);
     }
+/****************************************************参数处理************************************************/
+    /**
+     * 参数（可选）
+     *
+     * @param key
+     * @param value
+     * @param is
+     * @return
+     */
+    public String getChoosable(String key, String value, boolean is) {
+        if (value.isEmpty()) {
+            return "";
+        }
+        return is ? "&" + key + "=" + value : key + "=" + value;
+    }
 
-
+    /**
+     * 参数（可选）Map
+     *
+     * @param map
+     * @param key
+     * @param value
+     * @return
+     */
+    public Map getMapChoosable(Map map, String key, String value) {
+        if (!value.isEmpty()) {
+            map.put(key, value);
+        }
+        return map;
+    }
 }
