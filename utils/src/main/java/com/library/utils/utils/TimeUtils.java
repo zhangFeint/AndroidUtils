@@ -14,10 +14,14 @@ import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by Administrator on 2018\1\22 0022.
- */
 
+/**
+ * @author：zhangerpeng
+ * 版本：
+ * 日期：2019\2\13 0013
+ * 描述：
+ *   时间工具类
+ */
 public class TimeUtils {
     private static TimeUtils timeUtils;
     public static final String TIME_FORMAT_1 = "yyyy年MM月dd日 HH:mm:ss";

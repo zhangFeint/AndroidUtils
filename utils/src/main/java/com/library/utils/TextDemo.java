@@ -11,6 +11,8 @@ import com.library.utils.utils.FormatUtils;
 import com.library.utils.utils.StringUtil;
 import com.library.utils.utils.TimeUtils;
 
+import java.text.ParseException;
+
 /**
  * 功能：
  *
@@ -27,13 +29,20 @@ public class TextDemo {
 //        System.out.println(timeUtils.getTimeStateNew(longtime, TimeUtils.TIME_FORMAT_10));
 //       TimeUtils.TimeBean timeBean =  TimeUtils.getInstance().getStringData();
 //        System.out.println(timeBean.getDay());
-        System.out.println(StringUtil.getInstance().setReplace(3, 7, "13674928326", "****"));
-        System.out.println(StringUtil.getInstance().getRandomString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10));
+//
+//        System.out.println(StringUtil.getInstance().setReplace(3, 7, "13674928326", "****"));
+//        System.out.println(StringUtil.getInstance().getRandomString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10));
+//
+//        System.out.println(StringUtil.getInstance().getGUID());
+//        System.out.println(FormatUtils.getInstance().getRegexBankCard( "1234567890123454"));
+//        System.out.println(FormatUtils.getInstance().getRegexPhone( "13674928326"));
 
-        System.out.println(StringUtil.getInstance().getGUID());
-        System.out.println(FormatUtils.getInstance().getRegexBankCard( "1234567890123454"));
-        System.out.println(FormatUtils.getInstance().getRegexPhone( "13674928326"));
 
+        try {
+            System.out.println(TimeUtils.getInstance().getTimeForFormat("2018-06-02",TimeUtils.TIME_FORMAT_10,"MM"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 }
