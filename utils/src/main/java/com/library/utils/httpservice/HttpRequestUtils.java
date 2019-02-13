@@ -48,8 +48,8 @@ public class HttpRequestUtils {
     //编码集
     public static final String CHARSET_NAME_UTF = "UTF-8";
     public static final String CHARSET_NAME_GPK = "gbk";
-    //错误返回 0053 找不到网络路径
-    public static String error = "{\"code\":53,\"error\":\"http://www.fail.comfail\"}";
+    //错误返回 500 找不到网络路径
+    public static String error = "{\"code\":500,\"error\":\"服务器内部错误\"}";
     //文件下载保存的目录
     public static final String FILE_SAVE_CATALOGUE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Downloads";//文件存储路径  /storage/emulated/0
     public String savePath = null; // 储存下载文件的目录
