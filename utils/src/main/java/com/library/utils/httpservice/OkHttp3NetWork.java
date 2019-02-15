@@ -11,18 +11,7 @@ import android.widget.Toast;
  */
 
 public class OkHttp3NetWork {
-    private static final String TAG = OkHttp3NetWork.class.getSimpleName();
     private static final String NO_NETWORK_TEXT = "   没有网络能干啥，\n去设置中开启网络吧!";
-    private static final String LOADED_TIP = "资源加载中,请稍后...";
-
-    /**
-     * 提交数据,不带提示信息
-     */
-    @Deprecated
-    public static void submitNoDialog(Context context, int requetWay, UploadDataAsyncTask.NetWorkInterface netWork) {
-        initNetworkAvailable(context);
-        submitData(requetWay, null, 25000,  netWork);
-    }
 
     /**
      * 访问本地xml信息，用来做测试
@@ -33,30 +22,21 @@ public class OkHttp3NetWork {
      * @throws Exception
      */
     public static void submitDialog(Context context, String localFile, UploadDataAsyncTask.NetWorkInterface netWork) throws Exception {
-        initNetworkAvailable(context);
         netWork.result(HttpRequestUtils.getInstance().readJson(context, localFile));     //返回数据  跳到本页面的handleOrderList方法里面 146line
-    }
-
-    /**
-     * 提交数据,不带提示信息
-     */
-    public static void submitDialog(Context context, int requetWay, UploadDataAsyncTask.NetWorkInterface netWork) {
-        initNetworkAvailable(context);
-        submitData(requetWay, null, 25000, netWork);
     }
 
     /**
      * 提交数据,带提示信息
      */
-    public static void submitDialog(Context context, int requetWay, OnLoadListener control, UploadDataAsyncTask.NetWorkInterface netWork) {
-        initNetworkAvailable(context);
-        submitData(requetWay, control, 25000, netWork);
+    public static void submitDialog(Context context, int requetWay, OnNetworkListener onNetworkListener, OnLoadListener onLoadListener, UploadDataAsyncTask.NetWorkInterface netWork) {
+        submitData(context, requetWay, onNetworkListener,onLoadListener, 25000, netWork);
     }
 
     /**
      * 提交数据,OKhttp3 请求
      */
-    public static void submitData(int requetWay, OnLoadListener control, int overtime, UploadDataAsyncTask.NetWorkInterface netWork) {
+    public static void submitData(Context context, int requetWay, OnNetworkListener onNetworkListener, OnLoadListener control, int overtime, UploadDataAsyncTask.NetWorkInterface netWork) {
+        initNetworkAvailable(context,onNetworkListener);
         UploadDataAsyncTask up = new UploadDataAsyncTask(netWork, control, overtime, requetWay);
         up.execute();
     }
@@ -68,23 +48,24 @@ public class OkHttp3NetWork {
      * @param url      "http://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk"
      * @param listener
      */
-    public static void submitDownloadFile(Context context, String url, String saveDir, HttpRequestUtils.OnDownloadListener listener) {
-        initNetworkAvailable(context);
+    public static void submitDownloadFile(Context context, String url, String saveDir, OnNetworkListener onNetworkListener, HttpRequestUtils.OnDownloadListener listener) {
+        initNetworkAvailable(context,onNetworkListener);
         new HttpRequestUtils().download(url, saveDir, listener);
     }
 
 
     /**
      * 检测当的网络（WLAN、3G/2G）状态 true 表示网络可用
+     *
      * @param context
      */
-    public static void initNetworkAvailable(Context context) {
+    public static void initNetworkAvailable(Context context, OnNetworkListener onNetworkListener) {
         if (!isNetworkAvailable(context)) {   // 如果手机中没有可用的连接，给出提示信息
-         if(   listener==null){
-             Toast.makeText(context, NO_NETWORK_TEXT, Toast.LENGTH_SHORT).show();
-             return;
-         }
-            listener.Disnet();
+            if (onNetworkListener == null) {
+                Toast.makeText(context, NO_NETWORK_TEXT, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            onNetworkListener.onNoNetwork();
             return;
         }
     }
@@ -101,19 +82,9 @@ public class OkHttp3NetWork {
         return true;
     }
 
-    public static OnNetworkListener listener;
-
-    /**
-     * 网络监听
-     *
-     * @param onNetworkListener
-     */
-    public static void setOnNetworkListener(OnNetworkListener onNetworkListener) {
-        listener = onNetworkListener;
-    }
 
     public interface OnNetworkListener {
-        void Disnet();
+        void onNoNetwork();
     }
 
 
