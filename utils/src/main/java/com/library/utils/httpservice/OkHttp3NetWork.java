@@ -24,7 +24,16 @@ public class OkHttp3NetWork {
     public static void submitDialog(Context context, String localFile, OnNetWorkInterface netWork) throws Exception {
         netWork.result(HttpRequestUtils.getInstance().readJson(context, localFile));     //返回数据  跳到本页面的handleOrderList方法里面 146line
     }
-
+    /**
+     * 提交数据,带提示信息
+     *
+     * @param context
+     * @param requetWay  请求方式
+     * @param netWork
+     */
+    public static void submitDialog(Context context, int requetWay,  OnNetWorkInterface netWork) {
+        submitData(context, requetWay, null, 25000, netWork);
+    }
     /**
      * 提交数据,带提示信息
      *
