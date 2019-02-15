@@ -35,7 +35,6 @@ public class OkHttp3NetWork {
         submitData(context, requetWay, null, 25000, netWork);
     }
 
-
     /**
      * 提交数据,带提示信息
      *
