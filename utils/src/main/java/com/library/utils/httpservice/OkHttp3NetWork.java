@@ -30,12 +30,11 @@ public class OkHttp3NetWork {
      *
      * @param context
      * @param requetWay  请求方式
-     * @param onNetworkListener   断网接口
      * @param onLoadListener      加载弹框
      * @param netWork
      */
-    public static void submitDialog(Context context, int requetWay, OnNetworkListener onNetworkListener, OnLoadListener onLoadListener, OnNetWorkInterface netWork) {
-        submitData(context, requetWay, onNetworkListener, onLoadListener, 25000, netWork);
+    public static void submitDialog(Context context, int requetWay, OnLoadListener onLoadListener, OnNetWorkInterface netWork) {
+        submitData(context, requetWay, onLoadListener, 25000, netWork);
     }
 
     /**
@@ -43,12 +42,14 @@ public class OkHttp3NetWork {
      *
      * @param context
      * @param requetWay   请求方式
-     * @param onNetworkListener  断网接口
      * @param onLoadListener     加载弹框
      * @param netWork
      */
-    public static void submitData(Context context, int requetWay, OnNetworkListener onNetworkListener, OnLoadListener onLoadListener, int overtime, OnNetWorkInterface netWork) {
-        initNetworkAvailable(context, onNetworkListener);
+    public static void submitData(Context context, int requetWay,  OnLoadListener onLoadListener, int overtime, OnNetWorkInterface netWork) {
+        if (!isNetworkAvailable(context)) {   // 如果手机中没有可用的连接，给出提示信息
+            Toast.makeText(context, NO_NETWORK_TEXT, Toast.LENGTH_SHORT).show();
+            return;
+        }
         UploadDataAsyncTask up = new UploadDataAsyncTask(netWork, onLoadListener, overtime, requetWay);
         up.execute();
     }
@@ -59,31 +60,16 @@ public class OkHttp3NetWork {
      * @param context
      * @param url   "http://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk"
      * @param saveDir
-     * @param onNetworkListener   断网接口
      * @param listener
      */
-    public static void submitDownloadFile(Context context, String url, String saveDir, OnNetworkListener onNetworkListener, HttpRequestUtils.OnDownloadListener listener) {
-        initNetworkAvailable(context, onNetworkListener);
+    public static void submitDownloadFile(Context context, String url, String saveDir, HttpRequestUtils.OnDownloadListener listener) {
+        if (!isNetworkAvailable(context)) {   // 如果手机中没有可用的连接，给出提示信息
+            Toast.makeText(context, NO_NETWORK_TEXT, Toast.LENGTH_SHORT).show();
+            return;
+        }
         new HttpRequestUtils().download(url, saveDir, listener);
     }
 
-
-    /**
-     * 检测当的网络（WLAN、3G/2G）状态 true 表示网络可用
-     *
-     * @param context
-     * @param onNetworkListener  断网接口
-     */
-    private static void initNetworkAvailable(Context context, OnNetworkListener onNetworkListener) {
-        if (!isNetworkAvailable(context)) {   // 如果手机中没有可用的连接，给出提示信息
-            if (onNetworkListener == null) {
-                Toast.makeText(context, NO_NETWORK_TEXT, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            onNetworkListener.onNoNetwork();
-            return;
-        }
-    }
 
     /**
      * 判断当前手机是否有网络连接, true, 有可用的网络连接；false,没有可用的网络连接
