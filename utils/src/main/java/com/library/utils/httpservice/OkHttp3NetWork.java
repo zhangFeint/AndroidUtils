@@ -34,6 +34,8 @@ public class OkHttp3NetWork {
     public static void submitDialog(Context context, int requetWay,  OnNetWorkInterface netWork) {
         submitData(context, requetWay, null, 25000, netWork);
     }
+
+
     /**
      * 提交数据,带提示信息
      *
