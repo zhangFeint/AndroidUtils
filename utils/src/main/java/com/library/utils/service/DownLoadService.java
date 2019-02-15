@@ -56,7 +56,7 @@ public class DownLoadService extends Service {
         notifyId = intent.getIntExtra(KEY_NOTIFY_ID, 1000);
         tible = intent.getStringExtra(KEY_TIBLE);
         ProgressNotification.getInstance().initNotification(mContext, icon, tible, notifyId);
-        OkHttp3NetWork.submitDownloadFile(this, url, HttpRequestUtils.FILE_SAVE_CATALOGUE, new HttpRequestUtils.OnDownloadListener() {
+        OkHttp3NetWork.submitDownloadFile(this, url, HttpRequestUtils.FILE_SAVE_CATALOGUE,null, new HttpRequestUtils.OnDownloadListener() {
             @Override
             public void onDownloadSuccess(File file) {
                 ProgressNotification.getInstance().cancelNotification();

@@ -6,15 +6,14 @@ import android.os.AsyncTask;
 /**
  * 向服务器提交数据
  * <li>把UI展示作为一个线程，请求数据做为一个线程，2个线程互不影响。
- * <li>UI线程不需要再开子线程等复杂操作，在{@link NetWorkInterface}的result回调里直接拿数据即可。
+ * <li>UI线程不需要再开子线程等复杂操作，在{@link OnNetWorkInterface}的result回调里直接拿数据即可。
  */
 public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     private static final String TAG = UploadDataAsyncTask.class.getSimpleName();
-    private NetWorkInterface netWork;//数据的提交接口
+    private OnNetWorkInterface netWork;//数据的提交接口
     private OnLoadListener listener;
 
     private int overtime;//超时时间
-
 
     int requetWay = 1;
 
@@ -26,7 +25,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
      * @param listener
      * @param overtime
      */
-    public UploadDataAsyncTask(NetWorkInterface netWork, OnLoadListener listener, int overtime, int requetWay) {
+    public UploadDataAsyncTask(OnNetWorkInterface netWork, OnLoadListener listener, int overtime, int requetWay) {
         if (!netWork.validate()) { // 如果校验没有通过，不继续执行
             return;
         }
@@ -35,7 +34,7 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
         this.listener = listener;
         this.requetWay = requetWay;
         if (null != listener) {
-           listener.onShow();
+            listener.onShow();
         }
     }
 
@@ -70,32 +69,4 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
         super.onPostExecute(result);
     }
 
-
-    /**
-     * 数据的提交接口
-     *
-     * @author redkid
-     */
-    public interface NetWorkInterface {
-
-        /**
-         * 校验UI数据
-         *
-         * @return true往下进行，false停止 （注：返回false时自行处理提示信息）
-         */
-        boolean validate();
-
-        /**
-         * 需要提交服务器的数据
-         */
-        SubmitData getSubmitData();
-
-        /**
-         * 处理服务器返回数据
-         *
-         * @param result 返回数据结果
-         */
-        void result(final String result);
-
-    }
 }
