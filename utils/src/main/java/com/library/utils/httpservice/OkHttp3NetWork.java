@@ -74,7 +74,7 @@ public class OkHttp3NetWork {
      * @param context
      * @param onNetworkListener  断网接口
      */
-    public static void initNetworkAvailable(Context context, OnNetworkListener onNetworkListener) {
+    private static void initNetworkAvailable(Context context, OnNetworkListener onNetworkListener) {
         if (!isNetworkAvailable(context)) {   // 如果手机中没有可用的连接，给出提示信息
             if (onNetworkListener == null) {
                 Toast.makeText(context, NO_NETWORK_TEXT, Toast.LENGTH_SHORT).show();
@@ -96,5 +96,8 @@ public class OkHttp3NetWork {
         }
         return true;
     }
+
+
+
 
 }
