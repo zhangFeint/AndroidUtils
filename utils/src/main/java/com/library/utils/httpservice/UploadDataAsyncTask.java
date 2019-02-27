@@ -12,7 +12,8 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     private static final String TAG = UploadDataAsyncTask.class.getSimpleName();
     private OnNetWorkInterface netWork;//数据的提交接口
     private OnLoadListener listener;
-
+    //错误返回 500 找不到网络路径
+    public static String error = "{\"code\":500,\"error\":\"服务器内部错误\"}";
     private int overtime;//超时时间
 
     int requetWay = 1;
@@ -56,11 +57,22 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     protected String doInBackground(byte[]... params) {
         SubmitData data = netWork.getSubmitData();//获取提交数据信息
         HttpRequestUtils.getInstance().setOvertime(overtime);
-        String result = HttpRequestUtils.getInstance().getRequestRresults(data.getUrl(), data.getHeaders(), data.getBoby(), requetWay);
-        if (null != listener) {//捕获异常时关闭dialog
-            listener.onConceal();
+        String result = null;
+        try {
+            result = HttpRequestUtils.getInstance().getRequestRresults(data.getUrl(), data.getHeaders(), data.getBoby(), requetWay);
+            if (null != listener) {//捕获异常时关闭dialog
+                listener.onConceal();
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (null != listener) {//捕获异常时关闭dialog
+                listener.onConceal();
+            }
+            return error;
         }
-        return result;
+
+
     }
 
     @Override

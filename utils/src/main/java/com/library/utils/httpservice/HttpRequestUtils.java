@@ -48,7 +48,6 @@ public class HttpRequestUtils {
     //编码集
     public static final String CHARSET_NAME_UTF = "UTF-8";
     public static final String CHARSET_NAME_GPK = "gbk";
-    //错误返回 500 找不到网络路径
     public static String error = "{\"code\":500,\"error\":\"服务器内部错误\"}";
     //文件下载保存的目录
     public static final String FILE_SAVE_CATALOGUE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Downloads";//文件存储路径  /storage/emulated/0
@@ -59,17 +58,12 @@ public class HttpRequestUtils {
      * 单例模式
      */
     public static HttpRequestUtils getInstance() {
-        return httpRequestUtils == null ? new HttpRequestUtils() : httpRequestUtils;
+        if (httpRequestUtils == null) {
+            httpRequestUtils = new HttpRequestUtils();
+        }
+        return httpRequestUtils;
     }
 
-    /**
-     * 错误信息
-     *
-     * @param error
-     */
-    public void setError(String error) {
-        HttpRequestUtils.error = error;
-    }
 
     /**
      * 设置超时-时间
@@ -80,7 +74,7 @@ public class HttpRequestUtils {
         HttpRequestUtils.overtime = overtime;
     }
 
-    public String getRequestRresults(String url, HashMap<String, String> headers, RequestBody requestBody, int mode) {
+    public String getRequestRresults(String url, HashMap<String, String> headers, RequestBody requestBody, int mode) throws Exception {
         String result = null;
         if (requestBody == null) {
             requestBody = new FormBody.Builder().build();
@@ -157,7 +151,7 @@ public class HttpRequestUtils {
      * @param headers
      * @return
      */
-    public String doGet(String url, HashMap<String, String> headers) {
+    public String doGet(String url, HashMap<String, String> headers) throws Exception {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -174,7 +168,7 @@ public class HttpRequestUtils {
      * @param builder
      * @return
      */
-    public String doPut(String url, HashMap<String, String> headers, RequestBody builder) {
+    public String doPut(String url, HashMap<String, String> headers, RequestBody builder) throws Exception {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -192,7 +186,7 @@ public class HttpRequestUtils {
      * @param builder
      * @return
      */
-    public String doPost(String url, HashMap<String, String> headers, RequestBody builder) {
+    public String doPost(String url, HashMap<String, String> headers, RequestBody builder) throws Exception {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -210,7 +204,7 @@ public class HttpRequestUtils {
      * @param builder
      * @return
      */
-    public String doDelete(String url, HashMap<String, String> headers, RequestBody builder) {
+    public String doDelete(String url, HashMap<String, String> headers, RequestBody builder) throws Exception {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -226,26 +220,21 @@ public class HttpRequestUtils {
      * @param request 请求数据
      * @return
      */
-    private String execute(Request request) {
-        try {
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Response response = okHttpClient
-                    .newBuilder()
-                    .writeTimeout(overtime, TimeUnit.SECONDS)//超时时间
-                    .readTimeout(overtime, TimeUnit.SECONDS)
-                    .connectTimeout(overtime, TimeUnit.SECONDS)
-                    .build()
-                    .newCall(request)
-                    .execute();
-            if (response.isSuccessful()) {
-                return response.body().string();
-            }
-            return error;
-        } catch (IOException e) {
-            Log.e("HttpRequestUtils", e.getMessage());
-            e.printStackTrace();
-            return error;
+    private String execute(Request request) throws Exception {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Response response = okHttpClient
+                .newBuilder()
+                .writeTimeout(overtime, TimeUnit.SECONDS)//超时时间
+                .readTimeout(overtime, TimeUnit.SECONDS)
+                .connectTimeout(overtime, TimeUnit.SECONDS)
+                .build()
+                .newCall(request)
+                .execute();
+        if (response.isSuccessful()) {
+            return response.body().string();
         }
+        return error;
+
     }
 
     /**
