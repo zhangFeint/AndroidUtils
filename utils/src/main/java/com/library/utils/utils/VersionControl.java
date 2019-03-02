@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
@@ -33,6 +32,42 @@ public class VersionControl {
         this.context = context;
     }
 
+//    /**
+//     * 版本升级，带拒绝后不会弹出功能的对话框
+//     *
+//     * @param nVersion 最新的版本号
+//     * @param message  升级的内容
+//     * @param url      apk文件的url
+//     */
+//    public void updateRecordVersionDialog(final int nVersion, String message, final String url) {
+//        final SaveDataUtils saveData = new SaveDataUtils((Activity) context, SaveDataUtils.SAVE_VERSION);
+//        int saveVersion = saveData.getInt(VERSION_CODE, getAppVersionCode(context));
+//        saveData.setInt(VERSION_CODE, getAppVersionCode(context));
+//        if (nVersion > saveVersion) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//            builder.setCancelable(false);
+//            builder.setTitle(dialog_tible);
+//            builder.setMessage(message);
+//            builder.setPositiveButton(dialog_affirm, new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {
+//                    saveData.setInt(VERSION_CODE, nVersion);
+//                    saveData.commit();
+//                    dialog.dismiss();
+//                    startDownload(url);
+//                }
+//            });
+//            builder.setNegativeButton(dialog_cancel, new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {
+//                    saveData.setInt(VERSION_CODE, nVersion);
+//                    saveData.commit();
+//                    dialog.dismiss();
+//                }
+//            });
+//            builder.create().show();
+//        }
+//    }
+
+
     /**
      * 版本升级，带拒绝后不会弹出功能的对话框
      *
@@ -45,28 +80,21 @@ public class VersionControl {
         int saveVersion = saveData.getInt(VERSION_CODE, getAppVersionCode(context));
         saveData.setInt(VERSION_CODE, getAppVersionCode(context));
         if (nVersion > saveVersion) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setCancelable(false);
-            builder.setTitle(dialog_tible);
-            builder.setMessage(message);
-            builder.setPositiveButton(dialog_affirm, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
+            updateVersionDialog(dialog_tible, message, url, new OnVersionDialogListener() {
+                @Override
+                public void onPositive() {
                     saveData.setInt(VERSION_CODE, nVersion);
                     saveData.commit();
-                    dialog.dismiss();
                     startDownload(url);
                 }
-            });
-            builder.setNegativeButton(dialog_cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
+
+                @Override
+                public void onNegative() {
                     saveData.setInt(VERSION_CODE, nVersion);
                     saveData.commit();
-                    dialog.dismiss();
                 }
             });
-            builder.create().show();
         }
-
     }
 
     /**
@@ -76,22 +104,49 @@ public class VersionControl {
      * @param url     apk文件的url
      */
     public void updateVersionDialog(String message, final String url) {
+        updateVersionDialog(dialog_tible, message, url, new OnVersionDialogListener() {
+            @Override
+            public void onPositive() {
+                startDownload(url);
+            }
+
+            @Override
+            public void onNegative() {
+
+            }
+        });
+    }
+
+    /**
+     * 版本升级对话框
+     *
+     * @param message 升级的内容
+     * @param url     apk文件的url
+     */
+    public void updateVersionDialog(String tible, String message, final String url, final OnVersionDialogListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(false);
-        builder.setTitle(dialog_tible);
+        builder.setTitle(tible);
         builder.setMessage(message);
         builder.setPositiveButton(dialog_affirm, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                startDownload(url);
+                listener.onPositive();
             }
         });
         builder.setNegativeButton(dialog_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                listener.onNegative();
             }
         });
         builder.create().show();
+    }
+
+    public interface OnVersionDialogListener {
+        void onPositive();
+
+        void onNegative();
     }
 
 
