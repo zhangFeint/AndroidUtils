@@ -108,9 +108,9 @@ public class SystemUtils {
         }
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(uri);
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+//        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
         activity.startActivity(intent);
     }
 

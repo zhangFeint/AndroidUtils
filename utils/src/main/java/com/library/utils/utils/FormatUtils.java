@@ -4,7 +4,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -250,5 +252,19 @@ public class FormatUtils {
         });
     }
 
+    /**
+     *  百分比计算
+     * @param num    1
+     * @param total 3   总数
+     * @param scale 1  位数
+     * @return  33.3%
+     */
+    public  float accuracy(double num, double total, int scale){
+        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
+        df.setMaximumFractionDigits(scale); //可以设置精确几位小数
+        df.setRoundingMode(RoundingMode.HALF_UP);  //模式 例如四舍五入
+        float accuracy_num = (float) (num / total * 100);
+        return accuracy_num;
+    }
 
 }
