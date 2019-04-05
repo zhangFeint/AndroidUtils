@@ -49,19 +49,7 @@ public class StringUtil {
         return null == obj || "" == obj ? true : false;
     }
 
-    /**
-     * 去掉空格、判断字符串是否为空
-     *
-     * @param str
-     * @param trim
-     * @return
-     */
-    public boolean isEmpty(String str, boolean trim) {
-        if (trim) {
-            return null == str.trim() || "".equals(str.trim()) || str.trim().length() == 0 ? true : false;
-        }
-        return null == str || "".equals(str) || str.length() == 0 ? true : false;
-    }
+
 
 
     /**
@@ -146,19 +134,7 @@ public class StringUtil {
         return String.valueOf(obj);
     }
 
-    /**
-     * 最小几位数  001
-     *
-     * @param hourOfDay 1
-     * @param length    3
-     */
-    public String getMinimum(int hourOfDay, int length) {
-        String tempNum = hourOfDay + "";
-        while (tempNum.length() < length) {
-            tempNum = "0" + tempNum;
-        }
-        return tempNum;
-    }
+
 
     /**
      * 字符串转整形
@@ -167,8 +143,9 @@ public class StringUtil {
         try {
             return Integer.valueOf(Integer.parseInt(str.trim()));
         } catch (Exception ex) {
+            return null;
         }
-        return null;
+
     }
 
 
@@ -759,7 +736,8 @@ public class StringUtil {
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {
             /**
-             * matcher.group(0)返回?province=guangdong& matcher.group(1)返回?
+             * matcher.group(0)返回?province=guangdong&
+             * matcher.group(1)返回?
              * matcher.group(2)返回guangdong
              */
             return matcher.group(2);

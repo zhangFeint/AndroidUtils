@@ -38,8 +38,6 @@ public class SubmitData {
      */
     public SubmitData(String url) {
         this.url = url;
-
-
     }
 
     /**

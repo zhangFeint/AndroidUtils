@@ -22,6 +22,8 @@ import com.library.utils.service.DownLoadService;
  */
 public class VersionControl {
     private Context context;
+    private int versioncode = 0;//程序版本号
+    private String versionName;//程序版本名
     private final String VERSION_CODE = "VersionCode";
 
     private String dialog_tible = "更新提示";
@@ -161,12 +163,7 @@ public class VersionControl {
      * 返回当前程序版本号
      */
     public int getAppVersionCode(Context context) {
-        int versioncode = 0;
-        try {
-            versioncode = getVersionInformation(context).versionCode;
-        } catch (Exception e) {
-            Log.e("VersionInfo", "Exception", e);
-        }
+        initVersionInformation(context);
         return versioncode;
     }
 
@@ -174,24 +171,29 @@ public class VersionControl {
      * 返回当前程序版本名
      */
     public String getAppVersionName(Context context) {
-        String versionName = null;
-        try {
-            versionName = getVersionInformation(context).versionName;
-        } catch (Exception e) {
-            Log.e("VersionInfo", "Exception", e);
-        }
+        initVersionInformation(context);
         return versionName;
     }
+
+
 
     /**
      * 本软件的版本信息
      *
      * @return
      */
-    private PackageInfo getVersionInformation(Context context) throws PackageManager.NameNotFoundException {
-        PackageManager pm = context.getPackageManager();
-        PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
-        return pi;
+    private PackageInfo initVersionInformation(Context context) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+            versioncode = pi.versionCode;
+            return pi;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 

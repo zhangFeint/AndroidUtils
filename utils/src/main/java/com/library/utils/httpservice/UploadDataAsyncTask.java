@@ -15,7 +15,6 @@ public class UploadDataAsyncTask extends AsyncTask<byte[], Integer, String> {
     //错误返回 500 找不到网络路径
     public static String error = "{\"code\":500,\"error\":\"服务器内部错误\"}";
     private int overtime;//超时时间
-
     int requetWay = 1;
 
 

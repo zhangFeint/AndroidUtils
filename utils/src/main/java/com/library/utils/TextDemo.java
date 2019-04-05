@@ -10,6 +10,7 @@ import com.library.utils.httpservice.UploadDataAsyncTask;
 import com.library.utils.utils.FormatUtils;
 import com.library.utils.utils.StringUtil;
 import com.library.utils.utils.TimeUtils;
+import com.library.utils.utils.VersionControl;
 
 import java.text.ParseException;
 
@@ -37,7 +38,7 @@ public class TextDemo {
 //        System.out.println(FormatUtils.getInstance().getRegexBankCard( "1234567890123454"));
 //        System.out.println(FormatUtils.getInstance().getRegexPhone( "13674928326"));
 
-
+        System.out.println("args = " + FormatUtils.getInstance().getMinimum(12,5));
         try {
             System.out.println(TimeUtils.getInstance().getTimeForFormat("2018-06-02",TimeUtils.TIME_FORMAT_10,"MM"));
         } catch (ParseException e) {

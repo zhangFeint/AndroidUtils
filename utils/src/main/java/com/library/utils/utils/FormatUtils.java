@@ -1,5 +1,7 @@
 package com.library.utils.utils;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
@@ -251,7 +253,19 @@ public class FormatUtils {
             }
         });
     }
-
+    /**
+     * 最小几位数  001
+     *
+     * @param num 1
+     * @param length    3
+     */
+    public String getMinimum(int num, int length) {
+        String tempNum = num + "";
+        while (tempNum.length() < length) {
+            tempNum = "0" + tempNum;
+        }
+        return tempNum;
+    }
     /**
      *  百分比计算
      * @param num    1
@@ -259,6 +273,7 @@ public class FormatUtils {
      * @param scale 1  位数
      * @return  33.3%
      */
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     public  float accuracy(double num, double total, int scale){
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
         df.setMaximumFractionDigits(scale); //可以设置精确几位小数
