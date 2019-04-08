@@ -118,15 +118,29 @@ public class TimeUtils {
 
 
     /**
-     * 日期字符串转成指定格式的日期字符串 getTimeForFormat("2018-06-02",TimeUtils.TIME_FORMAT_10,TimeUtils.TIME_FORMAT_13)
+     * 日期字符串转成指定格式的日期字符串 06月02日
+     * @param str         "2018-06-02"
+     * @param currentFormat TimeUtils.TIME_FORMAT_10
+     * @param format TimeUtils.TIME_FORMAT_13
+     * @return  06月02日
      */
-    public String getTimeForFormat(String str, String currentFormat, String format) throws ParseException {
-        Date date = new SimpleDateFormat(currentFormat, Locale.getDefault()).parse(str.trim());
+    public String getTimeForFormat(String str, String currentFormat, String format) {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat(currentFormat, Locale.getDefault()).parse(str.trim());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return str;
+        }
         return new SimpleDateFormat(format, Locale.getDefault()).format(date);
     }
 
     /**
      * 字符串转日期getDate("2018-06-02",TimeUtils.TIME_FORMAT_10)
+     * @param str
+     * @param format
+     * @return
+     * @throws ParseException
      */
     public Date getDate(String str, String format) throws ParseException {
         return new SimpleDateFormat(format, Locale.getDefault()).parse(str.trim());
