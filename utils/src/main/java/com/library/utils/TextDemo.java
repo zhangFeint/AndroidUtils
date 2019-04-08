@@ -52,6 +52,7 @@ public class TextDemo {
         System.out.println("args = [" + token + "]");
         System.out.println(Jwt.validToken(token));
 
+        System.out.println(  StringUtil.getInstance().getRandomString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",2));
         System.out.println("args = " + FormatUtils.getInstance().getMinimum(12, 5));
         System.out.println(TimeUtils.getInstance().getTimeForFormat("2018-06-02", TimeUtils.TIME_FORMAT_10, "MM"));
     }

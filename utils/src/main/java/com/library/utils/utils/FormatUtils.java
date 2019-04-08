@@ -254,6 +254,18 @@ public class FormatUtils {
         });
     }
     /**
+     * 替换的字符串
+     *
+     * @param start   开始的位置  3
+     * @param end     结束的位置  7
+     * @param oldChar 原字符串   "13674928326"
+     * @param newChar 替换的字符  "****"
+     * @return 136****8326
+     */
+    public String setReplace(int start, int end, String oldChar, String newChar) {
+        return new StringBuilder(oldChar).replace(start, end, newChar).toString();
+    }
+    /**
      * 最小几位数  001
      *
      * @param num 1

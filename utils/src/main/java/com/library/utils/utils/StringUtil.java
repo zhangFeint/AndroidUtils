@@ -223,8 +223,8 @@ public class StringUtil {
         try {
             return Float.valueOf(Float.parseFloat(str.trim()));
         } catch (Exception ex) {
+            return null;
         }
-        return null;
     }
 
     public Float[] getFloatArray(String str, String spliter) {
