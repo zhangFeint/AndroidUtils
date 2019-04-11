@@ -41,7 +41,7 @@ public class Jwt {
      *         payload.put("uid", "291969452");//用户id
      *         payload.put("iat", date.getTime());//生成时间
      *         payload.put("ext", date.getTime() + 1000 * 60 * 60);//过期时间1小时
-     *
+     *  token = Jwt.createToken(payload);
      * @param payload 集合，可以存储用户id，token生成时间，token过期时间等自定义字段
      * @return token 字符串, 若失败则返回null
      */

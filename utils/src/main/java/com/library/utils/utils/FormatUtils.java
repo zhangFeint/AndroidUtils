@@ -40,12 +40,12 @@ public class FormatUtils {
      */
     public static final String REGEX_EMAIL = "^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$";
     /**
-     * 正则表达式：验证用户名
+     * 正则表达式：验证用户名  首字母+数字
      */
     public static final String REGEX_USERNAME = "^[a-zA-Z]\\w{5,20}$";
 
     /**
-     * 正则表达式：验证密码
+     * 正则表达式：验证密码 密码不能含有非法字符，长度在6-20之间
      */
     public static final String REGEX_PASSWORD = "^[a-zA-Z0-9]{6,20}$";
 
@@ -106,8 +106,7 @@ public class FormatUtils {
      * 金钱格式化
      */
     public String setMoneyFormat(float money) {
-        String sMoney = new DecimalFormat("##0.00").format(money);
-        return sMoney;
+        return  new DecimalFormat("##0.00").format(money);
     }
 
     /**

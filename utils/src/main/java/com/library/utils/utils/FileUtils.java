@@ -120,9 +120,10 @@ public class FileUtils {
         ifFileExist(pFile);
         return new File(pFile + File.separator + fileName);
     }
+
     /**
      * @param messageType 类型 int
-     * @param toId 标识
+     * @param toId        标识
      * @return
      */
     public String getFolder(int messageType, String toId) {
@@ -160,37 +161,48 @@ public class FileUtils {
         }
         return strFolder;
     }
-    /**
-     * Name文件名+时间==图片地址
-     */
-    public String getFileName(String Name) {
-        return Name + String.valueOf(System.currentTimeMillis());
-    }
 
     /**
-     * Name  IMG_+时间==图片地址
+     * Name文件名+时间==图片地址
+     *
+     * @param prefix 前缀
+     * @param suffix 后缀  ".jpg"
+     * @return
      */
-    public String getPicName(String Name) {
-        return Name + String.valueOf(System.currentTimeMillis()) + ".jpg";
+    public String getFileName(String prefix, String suffix) {
+        String result = String.valueOf(System.currentTimeMillis());
+        if (!StringUtil.getInstance().isEmpty(prefix)) {
+            result = prefix + result;
+        }
+        if (!StringUtil.getInstance().isEmpty(suffix)) {
+            result = result + suffix;
+        }
+        return result;
     }
+    /**
+     * @return 从下载连接中解析出文件名
+     */
+    @NonNull
+    private static String getNameFromUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
     //********************************************************************文件处理***************************************************************************************
 
     /**
      * 判断源文件是否存在，不存在就创建文件
      */
-
+    public void ifFileExist(String filePath) {
+        File srcFile = new File(filePath);
+        ifFileExist (srcFile);
+    }
     public void ifFileExist(File File) {
         if (!File.exists()) {
             File.mkdirs();
         }
     }
 
-    public void ifFileExist(String filePath) {
-        File srcFile = new File(filePath);
-        if (!srcFile.exists()) {
-            srcFile.mkdirs();
-        }
-    }
+
 
 
     /**
@@ -332,15 +344,15 @@ public class FileUtils {
     }
 
 
-
     /**
      * 下载文件
+     *
      * @param file
      * @param is
      * @param total
      * @param listener
      */
-    public static void downloadFile( final File file,InputStream is,long total, final OnDownloadListener listener) {
+    public  void downloadFile(final File file, InputStream is, long total, final OnDownloadListener listener) {
         byte[] buf = new byte[2048];
         int len = 0;
         FileOutputStream fos = null;
@@ -367,13 +379,7 @@ public class FileUtils {
             }
         }
     }
-    /**
-     * @return 从下载连接中解析出文件名
-     */
-    @NonNull
-    private static String getNameFromUrl(String url) {
-        return url.substring(url.lastIndexOf("/") + 1);
-    }
+
 
     public interface OnDownloadListener {
         //················下载成功·················

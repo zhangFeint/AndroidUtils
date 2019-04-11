@@ -311,7 +311,7 @@ public class SystemUtils {
         if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.CAMERA_PERMISSIONS)) {
             Toast.makeText(activity, "没有权限，请在设置中添加！", Toast.LENGTH_SHORT).show();
         }
-        file = FileUtils.getInstance().getSaveFile(savePath, subcatalog, FileUtils.getInstance().getPicName("IMG_"));
+        file = FileUtils.getInstance().getSaveFile(savePath, subcatalog, FileUtils.getInstance().getFileName("IMG_",""));
         ContentValues contentValues = new ContentValues(1);
         contentValues.put(MediaStore.Images.Media.DATA, file.getAbsolutePath()); //保存到默认相机目录
         cameraUri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues); // 其次把文件插入到系统图库
