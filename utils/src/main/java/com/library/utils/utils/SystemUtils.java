@@ -1,6 +1,5 @@
 package com.library.utils.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -13,7 +12,6 @@ import android.net.Uri;
 import android.provider.Contacts;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -88,9 +86,6 @@ public class SystemUtils {
      * @param phone    手机号
      */
     public void openPhone(final Activity activity, final String phone) {
-        if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.PHONE_PERMISSIONS)) {
-            Toast.makeText(activity, "没有权限，请在设置中添加！", Toast.LENGTH_SHORT).show();
-        }
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
@@ -100,32 +95,16 @@ public class SystemUtils {
      * 直接拨打电话， 要使用这个必须在配置文件中加入<uses-permission id="android.permission.open_PHONE" />
      *
      * @param activity
-     * @param uri      tel:13674928321
+     * @param uri      tel:13674928321  <a href="tel:4008119568">
      */
-    public void openPhone(final Activity activity, final Uri uri) {
-        if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.PHONE_PERMISSIONS)) {
-            Toast.makeText(activity, "没有权限，请在设置中添加！", Toast.LENGTH_SHORT).show();
-        }
+    public void openPhone(final Activity activity, Uri  uri) {
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(uri);
-//        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
         activity.startActivity(intent);
+//        activity.startActivity(new Intent(Intent.ACTION_VIEW,uri));
     }
 
-    /**
-     * url打电话
-     *
-     * @param activity
-     * @param url      <a href="tel:4008119568">
-     */
-    public void openPhoneUrl(final Activity activity, final String url) {
-        if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.PHONE_PERMISSIONS)) {
-            Toast.makeText(activity, "没有权限，请在设置中添加！", Toast.LENGTH_SHORT).show();
-        }
-        activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-    }
+
 
     /**
      * 发送短信
@@ -263,14 +242,10 @@ public class SystemUtils {
     /**
      * 安装软件
      *
-     * @param file
+     * @param activity
+     * @param apkUri
      */
-    public void installApk(Context activity, File file) {
-        File apkfile = new File(String.valueOf(file));
-        if (!apkfile.exists()) {
-            return;
-        }
-        Uri apkUri = PermissionsUtils.getInstance().getFileUriPermission(activity, apkfile);
+    public void installApk(Context activity,   Uri apkUri) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 由于没有在Activity环境下启动Activity,设置下面的标签
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);  //添加这一句表示对目标应用临时授权该Uri所代表的文件
@@ -308,9 +283,6 @@ public class SystemUtils {
     }
 
     public void openCamera(final Activity activity, final String savePath, final String subcatalog, final int requestCode) {
-        if (!PermissionsUtils.getInstance().isPermissions(activity, PermissionsUtils.CAMERA_PERMISSIONS)) {
-            Toast.makeText(activity, "没有权限，请在设置中添加！", Toast.LENGTH_SHORT).show();
-        }
         file = FileUtils.getInstance().getSaveFile(savePath, subcatalog, FileUtils.getInstance().getFileName("IMG_",""));
         ContentValues contentValues = new ContentValues(1);
         contentValues.put(MediaStore.Images.Media.DATA, file.getAbsolutePath()); //保存到默认相机目录
