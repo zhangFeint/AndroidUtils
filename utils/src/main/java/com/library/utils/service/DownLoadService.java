@@ -3,6 +3,7 @@ package com.library.utils.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
@@ -61,7 +62,7 @@ public class DownLoadService extends Service {
             public void onDownloadSuccess(File file) {
                 ProgressNotification.getInstance().cancelNotification();
                 DownLoadService.this.stopSelf();
-                SystemUtils.getInstance().installApk(mContext, file);  // 安装软件
+                SystemUtils.getInstance().installApk(mContext, Uri.fromFile(file));  // 安装软件
             }
 
             @Override
