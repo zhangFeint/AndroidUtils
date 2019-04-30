@@ -49,7 +49,8 @@ public class TextDemo {
         Date date = new Date();
         payload.put("uid", "291969452");//用户id
         payload.put("iat", date.getTime());//生成时间
-        payload.put("ext", date.getTime() + 1000 * 60 * 60);//过期时间1小时
+//        payload.put("ext", date.getTime() + 1000 * 60 * 60);//过期时间1小时
+        payload.put("sta", "1");//生成时间
         String token = null;
         token = Jwt.createToken(payload);
         System.out.println("args = [" + token + "]");

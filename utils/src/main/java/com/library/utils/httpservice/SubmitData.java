@@ -4,7 +4,6 @@ package com.library.utils.httpservice;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ import static java.lang.String.valueOf;
 public class SubmitData {
 
     private String url;
-    private HashMap<String, String> headers;
+    private Map<String, String> headers;
 
     private String charset = "utf-8";
     private RequestBody body;
@@ -55,16 +54,27 @@ public class SubmitData {
      *
      * @param headers
      */
-    public void setHeaders(HashMap<String, String> headers) {
+    public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
+    /**
+     * map<String,String> identityHashMap = new IdentityHashMap<>()</>
+     * identityHashMap.put(new String("key"),"value1")
+     * identityHashMap.put(new String("key"),"value2")
+     * 这里一定是 new String("")进行存key的值。IdentityHashMap 存住的是可重读key 但是 内部对比的是 key的地址，而不是hash值
+     * 也就是说内部使用的是 ==做的比对 大家有兴趣可以自己点进去看下 put的方法
+     *     </>
+     *
+     * @param
+     * @return
+
 
     /**
      * 请求体，表单格式
      *
      * @param map
      */
-    public void setBoby(HashMap<String, String> map) {
+    public void setBoby(Map<String, String> map) {
         formBody = new FormBody.Builder();
         if (map != null) {
             for (Map.Entry entry : map.entrySet()) {//追加表单信息
@@ -79,8 +89,7 @@ public class SubmitData {
      *
      * @param map
      */
-    public void setJosnBoby(HashMap<String, String> map) {
-        //TODO：
+    public void setJosnBoby(Map<String, String> map) {
         JSONObject json = new JSONObject(map);
         MediaType JSON = MediaType.parse("application/json; charset=" + charset);
         body = RequestBody.create(JSON, String.valueOf(json));
@@ -93,7 +102,7 @@ public class SubmitData {
      * @param fileKey
      * @param file
      */
-    public void setFileBoby(HashMap<String, String> map, String fileKey, File file) {
+    public void setFileBoby(Map<String, String> map, String fileKey, File file) {
         builder = new MultipartBody.Builder().setType(MultipartBody.FORM);//MultipartBody可以构建与HTML文件上传格式兼容的复杂请求体
         if (map != null) {
             for (Map.Entry entry : map.entrySet()) {//追加表单信息
@@ -112,7 +121,7 @@ public class SubmitData {
      * @param fileKey 文件key
      * @param files   文件集合
      */
-    public void setFileListBoby(HashMap<String, String> map, String fileKey, List<File> files) {
+    public void setFileListBoby(Map<String, String> map, String fileKey, List<File> files) {
         builder = new MultipartBody.Builder().setType(MultipartBody.FORM);//MultipartBody可以构建与HTML文件上传格式兼容的复杂请求体
         if (map != null) {
             for (Map.Entry entry : map.entrySet()) {//追加表单信息
@@ -140,7 +149,7 @@ public class SubmitData {
      *
      * @return
      */
-    public HashMap<String, String> getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 
