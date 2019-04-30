@@ -14,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -74,7 +73,7 @@ public class HttpRequestUtils {
         HttpRequestUtils.overtime = overtime;
     }
 
-    public String getRequestRresults(String url, HashMap<String, String> headers, RequestBody requestBody, int mode) throws Exception {
+    public String getRequestRresults(String url, Map<String, String> headers, RequestBody requestBody, int mode) throws Exception {
         String result = null;
         if (requestBody == null) {
             requestBody = new FormBody.Builder().build();
@@ -151,7 +150,7 @@ public class HttpRequestUtils {
      * @param headers
      * @return
      */
-    public String doGet(String url, HashMap<String, String> headers) throws Exception {
+    public String doGet(String url, Map<String, String> headers) throws Exception {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -168,7 +167,7 @@ public class HttpRequestUtils {
      * @param builder
      * @return
      */
-    public String doPut(String url, HashMap<String, String> headers, RequestBody builder) throws Exception {
+    public String doPut(String url, Map<String, String> headers, RequestBody builder) throws Exception {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -186,7 +185,7 @@ public class HttpRequestUtils {
      * @param builder
      * @return
      */
-    public String doPost(String url, HashMap<String, String> headers, RequestBody builder) throws Exception {
+    public String doPost(String url, Map<String, String> headers, RequestBody builder) throws Exception {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -204,7 +203,7 @@ public class HttpRequestUtils {
      * @param builder
      * @return
      */
-    public String doDelete(String url, HashMap<String, String> headers, RequestBody builder) throws Exception {
+    public String doDelete(String url, Map<String, String> headers, RequestBody builder) throws Exception {
         Request request = new Request
                 .Builder()
                 .url(url)
@@ -329,34 +328,5 @@ public class HttpRequestUtils {
         //················下载失败·················
         void onDownloadFailed(Call call, IOException e);
     }
-/****************************************************参数处理************************************************/
-    /**
-     * 参数（可选）
-     *
-     * @param key
-     * @param value
-     * @param is
-     * @return
-     */
-    public String getChoosable(String key, String value, boolean is) {
-        if (value.isEmpty()) {
-            return "";
-        }
-        return is ? "&" + key + "=" + value : key + "=" + value;
-    }
 
-    /**
-     * 参数（可选）Map
-     *
-     * @param map
-     * @param key
-     * @param value
-     * @return
-     */
-    public Map getMapChoosable(Map map, String key, String value) {
-        if (!value.isEmpty()) {
-            map.put(key, value);
-        }
-        return map;
-    }
 }

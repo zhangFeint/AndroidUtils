@@ -19,6 +19,7 @@ import com.library.utils.utils.VersionControl;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
@@ -61,6 +62,7 @@ public class TextDemo {
         System.out.println(TimeUtils.getInstance().getTimeForFormat("2018-06-02", TimeUtils.TIME_FORMAT_10, "MM"));
 
         System.out.println(FormatUtils.getInstance().isVerify("p1235456", FormatUtils.REGEX_USERNAME));
+
     }
 
 
