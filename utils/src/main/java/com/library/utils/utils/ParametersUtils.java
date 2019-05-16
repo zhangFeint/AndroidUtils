@@ -1,5 +1,6 @@
 package com.library.utils.utils;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class ParametersUtils {
         }
         for (String key : map.keySet()) {
             String value = map.get(key);
-            if (value.isEmpty()) {
+            if (StringUtil.getInstance().isEmpty(value)) {
                 url = url + "";
             } else {
                 if (!url.contains("?")) {
@@ -34,6 +35,29 @@ public class ParametersUtils {
                     url = url + "&" + key + "=" + value;
                 }
             }
+        }
+        return url;
+    }
+    /**
+     * get  添加选填参数
+     * @param url
+     * @param map
+     * @return
+     */
+    public String getChoosableJoint(String url, Map<String, String> map) {
+        if (map.size() == 0) {
+            return url;
+        }
+        for (String key : map.keySet()) {
+            String value = map.get(key);
+            if(value ==null){
+                value = "";
+            }
+                if (!url.contains("?")) {
+                    url = url + "?" + key + "=" + value;
+                } else {
+                    url = url + "&" + key + "=" + value;
+                }
         }
         return url;
     }
@@ -48,6 +72,13 @@ public class ParametersUtils {
     public void setParametersMap(Map map,String key,String value){
         if(StringUtil.getInstance().isEmpty(value)){
            return;
+        }else {
+            map.put(key,value);
+        }
+    }
+    public void setParametersMapJoint(Map map,String key,String value){
+        if(StringUtil.getInstance().isEmpty(value)){
+            map.put(key,"");
         }else {
             map.put(key,value);
         }

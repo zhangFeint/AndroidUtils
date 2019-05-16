@@ -1,25 +1,18 @@
 package com.library.utils;
 
 
-import android.widget.Toast;
 
-import com.library.utils.httpservice.HttpRequestUtils;
-import com.library.utils.httpservice.OkHttp3NetWork;
-import com.library.utils.httpservice.SubmitData;
-import com.library.utils.httpservice.UploadDataAsyncTask;
-import com.library.utils.utils.CerifyCode;
-import com.library.utils.utils.FileUtils;
 import com.library.utils.utils.FormatUtils;
 import com.library.utils.utils.Jwt;
-import com.library.utils.utils.ParametersUtils;
 import com.library.utils.utils.StringUtil;
 import com.library.utils.utils.TimeUtils;
-import com.library.utils.utils.VersionControl;
 
-import java.text.ParseException;
+import org.json.JSONObject;
+
+
 import java.util.Date;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
+
 import java.util.Map;
 
 /**
@@ -46,22 +39,24 @@ public class TextDemo {
 //        System.out.println(FormatUtils.getInstance().getRegexBankCard( "1234567890123454"));
 //        System.out.println(FormatUtils.getInstance().getRegexPhone( "13674928326"));
 
-        Map<String, Object> payload = new HashMap<String, Object>();
-        Date date = new Date();
-        payload.put("uid", "291969452");//用户id
-        payload.put("iat", date.getTime());//生成时间
-//        payload.put("ext", date.getTime() + 1000 * 60 * 60);//过期时间1小时
-        payload.put("sta", "1");//生成时间
-        String token = null;
-        token = Jwt.createToken(payload);
-        System.out.println("args = [" + token + "]");
-        System.out.println(Jwt.validToken(token));
+//        Map<String, Object> payload = new HashMap<String, Object>();
+//        Date date = new Date();
+//        payload.put("uid", "291969452");//用户id
+//        payload.put("iat", date.getTime());//生成时间
+////        payload.put("ext", date.getTime() + 1000 * 60 * 60);//过期时间1小时
+//        payload.put("sta", "1");//生成时间
+//        String token = null;
+//        token = Jwt.createToken(payload);
+//        System.out.println("args = [" + token + "]");
+//        System.out.println(Jwt.validToken(token));
+//
+//        System.out.println(StringUtil.getInstance().getRandomString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 2));
+//        System.out.println("args = " + FormatUtils.getInstance().getMinimum(12, 5));
+//        System.out.println(TimeUtils.getInstance().getTimeForFormat("2018-06-02", TimeUtils.TIME_FORMAT_10, "MM"));
+//
+//        System.out.println(FormatUtils.getInstance().isVerify("p1235456", FormatUtils.REGEX_USERNAME));
 
-        System.out.println(StringUtil.getInstance().getRandomString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 2));
-        System.out.println("args = " + FormatUtils.getInstance().getMinimum(12, 5));
-        System.out.println(TimeUtils.getInstance().getTimeForFormat("2018-06-02", TimeUtils.TIME_FORMAT_10, "MM"));
 
-        System.out.println(FormatUtils.getInstance().isVerify("p1235456", FormatUtils.REGEX_USERNAME));
 
     }
 

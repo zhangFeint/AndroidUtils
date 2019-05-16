@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 
 public class FormatUtils {
     private static FormatUtils formatUtils;
-
     /**
      * 单例模式
      */
@@ -33,7 +32,6 @@ public class FormatUtils {
      * 银行卡
      */
     public static final String REGEX_BANK_CARD = "/^([1-9]{1})(\\d{14}|\\d{18})$/";
-
 
     /**
      * email格式
@@ -54,7 +52,6 @@ public class FormatUtils {
      */
     public static final String REGEX_MOBILE = "^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
 
-
     /**
      * 正则表达式：验证汉字
      */
@@ -64,8 +61,7 @@ public class FormatUtils {
      * 正则表达式：验证身份证
      */
     public static final String REGEX_ID_CARD = "(^\\d{18}$)|(^\\d{15}$)";
-//    //身份证 （正则表达式）
-//    private static final String REGEX_ID_CARD = "(^d{15}$)|(^d{17}([0-9]|X)$)";
+//    private static final String REGEX_ID_CARD = "(^d{15}$)|(^d{17}([0-9]|X)$)";//身份证 （正则表达式）
     /**
      * 正则表达式：验证URL
      */
@@ -89,7 +85,10 @@ public class FormatUtils {
      * @return
      */
     public String setMoneyFormat(String str) {
-        return setMoneyFormat(Double.parseDouble(str));
+        if (isNumeric(str)){
+            return setMoneyFormat(Double.parseDouble(str));
+        }
+        return str;
     }
 
     /**
@@ -292,5 +291,15 @@ public class FormatUtils {
         float accuracy_num = (float) (num / total * 100);
         return accuracy_num;
     }
-
+    /**
+     * 判断字符串是否为数字
+     */
+    public boolean isNumeric(String str) {
+        for (int i = str.length(); --i >= 0; ) {
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
